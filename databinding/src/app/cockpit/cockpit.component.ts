@@ -1,14 +1,21 @@
 import { Component, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 
+interface Server {
+  serverName: string;
+  serverContent: string;
+}
+
 @Component({
   selector: 'app-cockpit',
   templateUrl: './cockpit.component.html',
   styleUrls: ['./cockpit.component.scss']
 })
 export class CockpitComponent implements OnInit {
-  @Output() serverCreated = new EventEmitter<{serverName: string, serverContent: string}>();
+  @Output()
+  serverCreated: EventEmitter<Server> = new EventEmitter<Server>();
   // tslint:disable-next-line:no-output-rename
-  @Output('bpCreated') blueprintCreated = new EventEmitter<{serverName: string, serverContent: string}>();
+  @Output('bpCreated')
+  blueprintCreated: EventEmitter<Server> = new EventEmitter<Server>();
   // newServerName = '';
   // newServerContent = '';
   @ViewChild('serverContentInput', { static: false }) serverContentInput: ElementRef;
