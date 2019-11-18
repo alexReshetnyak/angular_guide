@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { CockpitComponent } from './cockpit/cockpit.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   public serverElements = [{type: 'server', name: 'Testserver', content: 'Just a test!'}];
+  @ViewChild(CockpitComponent, {static: true}) private childCockpitComponent: CockpitComponent;
+
+  public ngAfterViewInit(): void {
+    console.log('Child Cockpit Component', this.childCockpitComponent);
+  }
 
   public onServerAdded(serverData: {serverName: string, serverContent: string}): void {
     this.serverElements.push({
@@ -15,6 +21,7 @@ export class AppComponent {
       content: serverData.serverContent
     });
   }
+
 
   public onBlueprintAdded(blueprintData: {serverName: string, serverContent: string}): void {
     this.serverElements.push({

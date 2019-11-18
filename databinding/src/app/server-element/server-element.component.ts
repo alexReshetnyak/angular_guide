@@ -37,47 +37,56 @@ export class ServerElementComponent implements
   @Input('srvElement') element: {type: string, name: string, content: string};
   @Input() name: string;
   @ViewChild('heading', {static: true}) header: ElementRef;
+  // * Search element inside ng-content
   @ContentChild('contentParagraph', {static: true}) paragraph: ElementRef;
 
   constructor() {
-    console.log('constructor called!');
+    console.log('#ServerComponent constructor called!');
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('ngOnChanges called!');
+    //  ! WHEN COMPONENT CREATED, WHEN COMPONENT INPUT DATA WAS CHANGED
+    console.log('#ServerComponent ngOnChanges called!');
     console.log(changes);
   }
 
   ngOnInit() {
-    console.log('ngOnInit called!');
-    console.log('Text Content: ' + this.header.nativeElement.textContent);
-    console.log('Text Content of paragraph: ' + this.paragraph.nativeElement.textContent);
+    // ! CALLED ONCE AFTER CLASS CONSTRUCTOR
+    console.log('#ServerComponent ngOnInit called!');
+    console.log('#ServerComponent Text Content: ' + this.header.nativeElement.textContent);
+    console.log('#ServerComponent Text Content of paragraph: ' + this.paragraph.nativeElement.textContent);
   }
 
   ngDoCheck() {
-    console.log('ngDoCheck called!');
+    // ! CALLED EVERY TIME WHEN CHANGE DETECTION RUNS
+    console.log('#ServerComponent ngDoCheck called!');
   }
 
   ngAfterContentInit() {
-    console.log('ngAfterContentInit called!');
-    console.log('Text Content of paragraph: ' + this.paragraph.nativeElement.textContent);
+    // ! CALLED AFTER CONTENT(ng-content) HAS BEEN INITIALIZED
+    console.log('#ServerComponent ngAfterContesntInit called!');
+    console.log('#ServerComponent Text Content of paragraph: ' + this.paragraph.nativeElement.textContent);
   }
 
   ngAfterContentChecked() {
-    console.log('ngAfterContentChecked called!');
+    // ! CALLED EVERY TIME WHEN CONTENT HAVE BEEN CHECKED
+    console.log('#ServerComponent ngAfterContentChecked called!');
   }
 
   ngAfterViewInit() {
-    console.log('ngAfterViewInit called!');
-    console.log('Text Content: ' + this.header.nativeElement.textContent);
+    // ! CALLED AFTER COMPONENT VIEW HAS BEEN INITIALIZED
+    console.log('#ServerComponent ngAfterViewInit called!');
+    console.log('#ServerComponent Text Content: ' + this.header.nativeElement.textContent);
   }
 
   ngAfterViewChecked() {
-    console.log('ngAfterViewChecked called!');
+    // ! CALLED EVERY TIME WHEN VIEW HAVE BEEN CHECKED
+    console.log('#ServerComponent ngAfterViewChecked called!');
   }
 
   ngOnDestroy() {
-    console.log('ngOnDestroy called!');
+    // ! CALLED BEFORE DESTROY COMPONENT OBJECT
+    console.log('#ServerComponent ngOnDestroy called!');
   }
 
 }

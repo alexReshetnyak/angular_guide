@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 
 interface Server {
   serverName: string;
@@ -10,7 +10,7 @@ interface Server {
   templateUrl: './cockpit.component.html',
   styleUrls: ['./cockpit.component.scss']
 })
-export class CockpitComponent implements OnInit {
+export class CockpitComponent implements OnInit, AfterViewChecked {
   @Output()
   serverCreated: EventEmitter<Server> = new EventEmitter<Server>();
   // tslint:disable-next-line:no-output-rename
@@ -23,6 +23,10 @@ export class CockpitComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewChecked(): void {
+    console.log('#CockpitComponent serverContentInput', this.serverContentInput);
   }
 
   onAddServer(nameInput: HTMLInputElement) {
