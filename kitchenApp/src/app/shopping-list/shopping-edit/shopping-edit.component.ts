@@ -17,7 +17,7 @@ import { Ingredient } from '../../shared/models/ingredient.model';
 export class ShoppingEditComponent implements OnInit {
   @ViewChild('nameInput', { static: false }) private nameInputRef: ElementRef;
   @ViewChild('amountInput', { static: false }) private amountInputRef: ElementRef;
-  @Output() ingredientAdded = new EventEmitter<Ingredient>();
+  @Output() private ingredientAdded: EventEmitter<Ingredient> = new EventEmitter<Ingredient>();
 
   constructor() { }
 
