@@ -1,19 +1,21 @@
 @keyframes fade-in {
-  from {
-    transform: translateY(-100%);
+  0% {
     height: 0;
-    opacity: 0;
+    overflow: hidden;
   }
-  to {
-    transform: translateY(0%);
-    opacity: 1;
-    height: 150px;
+  99% {
+    height: 120px;
+    overflow: hidden;
+  }
+  100% {
+    overflow: visible;
+    height: unset;
   }
 }
 
 .navbar {
   margin-bottom: 1rem;
-  background-color: rgb(223, 255, 255);
+  background-color: rgb(250, 255, 210);
 
   a {
     color: rgba(0,0,0,.5);
@@ -22,23 +24,41 @@
   .navbar-brand {
     color: rgba(0,0,0,.9);
   }
-}
 
-.show {
-  .dropdown-menu {
-    display: block;
-    left: unset;
-    right: 0;
+  .dropdown-toggle {
+    padding: 0.5rem 0rem;
   }
 }
 
-.navbar-collapse {
-  overflow: hidden;
-  transition: all 0.5s;
-  height: 0;
+.show > .dropdown-menu {
+    display: block;
+    position: static;
+    float: none;
 }
 
-.show-menu {
-  height: 150px;
-  // animation: fade-in 0.5s;
+.navbar-collapse, .show {
+  animation: fade-in 0.3s;
+  .nav-item {
+    animation: unset;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-collapse {
+    height: unset;
+    overflow: visible;
+  }
+
+  .dropdown-toggle {
+    padding: 0.5rem 1rem;
+  }
+
+  .show {
+    .dropdown-menu {
+      left: unset;
+      right: 0;
+      position: absolute;
+      float: left;
+    }
+  }
 }

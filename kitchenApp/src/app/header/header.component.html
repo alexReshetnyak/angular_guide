@@ -14,7 +14,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="navbar-collapse" [ngClass]="{'show-menu': showMenu}" id="navbarSupportedContent">
+  <div class="navbar-collapse collapse" [ngClass]="{'show': showMenu}" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a
@@ -37,7 +37,7 @@
       </li>
     </ul>
 
-    <div class="nav-item dropdown" appDropdown>
+    <div class="nav-item dropdown" appDropdown cssClass="show">
       <a
         class="nav-link dropdown-toggle"
         href="#"
