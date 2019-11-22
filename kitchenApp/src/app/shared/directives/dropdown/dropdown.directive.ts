@@ -18,8 +18,6 @@ export class DropdownDirective {
   constructor(private elRef: ElementRef, private renderer: Renderer2) { }
 
   @HostListener('click') toggleOpen() {
-    console.log('#Dropdown directive cssClass', this.cssClass);
-
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
       this.renderer.addClass(this.elRef.nativeElement, this.cssClass);
