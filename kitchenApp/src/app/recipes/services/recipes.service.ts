@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { RecipesComponent } from '../recipes.component';
 import { Recipe } from '../models/recipe.model';
 import { Ingredient } from '../../shared/models/ingredient.model'
 import { ShoppingListService } from '../../shopping-list/services/shopping-list.service';
@@ -24,20 +23,19 @@ const mockRecipes = [
 ];
 
 
-@Injectable({
-  providedIn: RecipesComponent
-})
+@Injectable()
 export class RecipesService {
-  recipeSelected = new EventEmitter<Recipe>();
+  public recipeSelected: EventEmitter<Recipe> = new EventEmitter<Recipe>();
 
   private recipes: Recipe[] = mockRecipes;
-  constructor(private slService: ShoppingListService) {}
 
-  getRecipes() {
+  constructor(private shoppingListService: ShoppingListService) {}
+
+  public getRecipes(): Recipe[] {
     return this.recipes.slice();
   }
 
-  addIngredientsToShoppingList(ingredients: Ingredient[]) {
-    this.slService.addIngredients(ingredients);
+  public addIngredientsToShoppingList(ingredients: Ingredient[]): void {
+    this.shoppingListService.addIngredients(ingredients);
   }
 }
