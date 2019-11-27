@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { HomeComponent } from './components/home/home.component';
 import { UsersComponent } from './components/users/users.component';
 import { UserComponent } from './components/users/user/user.component';
-import { AuthGuard } from './shared/guards/auth.guard';
 import { ServersComponent } from './components/servers/servers.component';
 import { ServerComponent } from './components/servers/server/server.component';
-import { ServerResolver } from './components/servers/server/server-resolver.service';
 import { EditServerComponent } from './components/servers/edit-server/edit-server.component';
-import { CanDeactivateGuard } from './components/servers/edit-server/can-deactivate-guard.service';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+
+import { CanDeactivateGuard } from './components/servers/edit-server/can-deactivate-guard.service';
+import { AuthGuard } from './shared/guards/auth.guard';
+import { ServerResolver } from './components/servers/server/server-resolver.service';
 
 
 const appRoutes: Routes = [

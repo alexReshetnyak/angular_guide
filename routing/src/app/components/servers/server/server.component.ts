@@ -18,12 +18,9 @@ export class ServerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.data
-      .subscribe(
-        (data: Data) => {
-          this.server = data['server'];
-        }
-      );
+    this.route.data.subscribe((data: Data) => {
+      this.server = data['server'];
+    });
     // const id = +this.route.snapshot.params['id'];
     // this.server = this.serversService.getServer(id);
     // this.route.params
@@ -35,6 +32,9 @@ export class ServerComponent implements OnInit {
   }
 
   onEdit() {
+    // * By default the query parameters are lost on any subsequent navigation action.
+    // * To prevent this, you can set queryParamsHandling to either preserve or merge
+    // * preserve will keep query params: /home?param1=2 => /users?param1=2
     this.router.navigate(['edit'], {relativeTo: this.route, queryParamsHandling: 'preserve'});
   }
 

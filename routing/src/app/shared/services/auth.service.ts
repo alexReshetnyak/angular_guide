@@ -7,13 +7,11 @@ export class AuthService {
   loggedIn: boolean = false;
 
   isAuthenticated(): Promise<boolean | any> {
-    const promise = new Promise(
-      (resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve(this.loggedIn);
         }, 800);
-      }
-    );
+    });
     return promise;
   }
 

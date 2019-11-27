@@ -22,6 +22,7 @@ export class ServersComponent implements OnInit {
   }
 
   onReload() {
+    // * relativeTo - tell angular on what rout we now (if we want to set relative routes)
     // this.router.navigate(['servers'], {relativeTo: this.route});
   }
 

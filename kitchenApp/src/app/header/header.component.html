@@ -16,7 +16,11 @@
 
   <div class="navbar-collapse collapse" [ngClass]="{'show': showMenu}" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+      >
         <a
           class="nav-link"
           (click)="onSelect('recipe')"
@@ -26,7 +30,11 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+      >
         <a
           class="nav-link"
           (click)="onSelect('shopping-list')"

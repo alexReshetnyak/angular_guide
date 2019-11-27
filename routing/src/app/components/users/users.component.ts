@@ -9,7 +9,7 @@ export class UsersComponent {
   users = [
     {
       id: 1,
-      name: 'Max'
+      name: 'Alexey'
     },
     {
       id: 2,
