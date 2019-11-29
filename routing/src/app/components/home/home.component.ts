@@ -21,10 +21,12 @@ export class HomeComponent implements OnInit {
   }
 
   onLogin() {
+    console.log('Login');
     this.authService.login();
   }
 
   onLogout() {
+    console.log('Logout');
     this.authService.logout();
   }
 }

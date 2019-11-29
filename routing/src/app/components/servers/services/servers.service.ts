@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 
+interface Server {
+  id: number;
+  name: string;
+  status: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ServersService {
-  private servers = [
+  private servers: Server[] = [
     {
       id: 1,
       name: 'Productionserver',
@@ -26,12 +32,10 @@ export class ServersService {
     return this.servers;
   }
 
-  getServer(id: number) {
-    const server = this.servers.find(
-      (s) => {
+  getServer(id: number): Server {
+    const server = this.servers.find((s) => {
         return s.id === id;
-      }
-    );
+    });
     return server;
   }
 

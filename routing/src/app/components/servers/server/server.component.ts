@@ -12,7 +12,7 @@ export class ServerComponent implements OnInit {
   server: {id: number, name: string, status: string};
 
   constructor(
-    private serversService: ServersService,
+    // private serversService: ServersService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
