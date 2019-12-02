@@ -23,8 +23,7 @@
       >
         <a
           class="nav-link"
-          (click)="onSelect('recipe')"
-          href="#"
+          routerLink="/recipes"
         >
           Recipes <span class="sr-only">(current)</span>
         </a>
@@ -37,8 +36,7 @@
       >
         <a
           class="nav-link"
-          (click)="onSelect('shopping-list')"
-          href="#"
+          routerLink="/shopping-list"
         >
           Shopping List
         </a>
@@ -48,20 +46,20 @@
     <div class="nav-item dropdown" appDropdown cssClass="show">
       <a
         class="nav-link dropdown-toggle"
-        href="#"
         id="navbarDropdown"
         role="button"
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
+        style="cursor: pointer;"
       >
         Manage
       </a>
 
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#">Save Data</a>
+        <a class="dropdown-item" style="cursor: pointer;">Save Data</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">Fetch Data</a>
+        <a class="dropdown-item" style="cursor: pointer;">Fetch Data</a>
       </div>
     </div>
   </div>

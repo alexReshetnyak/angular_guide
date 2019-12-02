@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -7,11 +7,6 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class HeaderComponent {
   public showMenu = false;
-  @Output() private featureSelected: EventEmitter<string> = new EventEmitter<string>();
-
-  public onSelect(feature: string) {
-    this.featureSelected.emit(feature);
-  }
 
   public toggleMenu():void {
     this.showMenu = !this.showMenu;
