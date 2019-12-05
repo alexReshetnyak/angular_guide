@@ -9,14 +9,14 @@ import { UserService } from './services/user.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  userActivated = false;
+  public  userActivated = false;
   private activatedSub: Subscription;
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit() {
-    this.activatedSub = this.userService.activatedEmitter.subscribe(didActivate => {
+    this.activatedSub = this.userService.activatedEmitter.subscribe((didActivate: boolean) => {
       this.userActivated = didActivate;
     });
   }

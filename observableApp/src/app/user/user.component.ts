@@ -9,7 +9,7 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  id: number;
+  public id: number;
 
   constructor(
     private route: ActivatedRoute,
