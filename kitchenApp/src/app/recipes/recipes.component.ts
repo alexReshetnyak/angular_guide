@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+// import { Subscription } from 'rxjs';
 
 import { Recipe } from './models/recipe.model';
 import { RecipesService } from './services/recipes.service';
@@ -12,12 +13,13 @@ import { RecipesService } from './services/recipes.service';
 export class RecipesComponent implements OnInit {
   public selectedRecipe: Recipe;
 
-  constructor(private recipesService: RecipesService) { }
+  constructor(
+    // private recipesService: RecipesService
+  ) { }
 
   ngOnInit() {
-    this.recipesService.recipeSelected.subscribe((recipe: Recipe) => {
-      this.selectedRecipe = recipe;
-    });
+    // this.subscription = this.recipesService.getRecipeSelected().subscribe((recipe: Recipe) => {
+    //   this.selectedRecipe = recipe;
+    // });
   }
-
 }

@@ -1,8 +1,9 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { Recipe } from '../models/recipe.model';
 import { Ingredient } from '../../shared/models/ingredient.model'
 import { ShoppingListService } from '../../shopping-list/services/shopping-list.service';
+// import { Subject, Observable } from 'rxjs';
 
 const mockRecipes = [
   new Recipe(
@@ -25,8 +26,7 @@ const mockRecipes = [
 
 @Injectable()
 export class RecipesService {
-  public recipeSelected: EventEmitter<Recipe> = new EventEmitter<Recipe>();
-
+  // private _recipeSelected: Subject<Recipe> = new Subject<Recipe>();
   private recipes: Recipe[] = mockRecipes;
 
   constructor(private shoppingListService: ShoppingListService) {}
@@ -38,6 +38,14 @@ export class RecipesService {
   public getRecipe(index: number): Recipe {
     return this.recipes[index];
   }
+
+  // public getRecipeSelected(): Observable<Recipe> {
+  //   return this._recipeSelected.asObservable();
+  // }
+
+  // public setRecipeSelected(recipe: Recipe): void {
+  //   this._recipeSelected.next(recipe);
+  // }
 
   public addIngredientsToShoppingList(ingredients: Ingredient[]): void {
     this.shoppingListService.addIngredients(ingredients);
