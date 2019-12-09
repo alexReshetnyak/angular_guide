@@ -28,7 +28,9 @@ export class AppComponent implements OnInit {
         )
       }),
       gender: new FormControl("male"),
-      hobbies: new FormArray([])
+      hobbies: new FormArray([
+        new FormControl()
+      ])
     });
 
     this.signupForm.valueChanges.subscribe(value =>
@@ -40,11 +42,11 @@ export class AppComponent implements OnInit {
 
     this.signupForm.setValue({
       userData: {
-        username: "Max",
-        email: "max@test.com"
+        username: "Alexey",
+        email: "alex@test.com"
       },
       gender: "male",
-      hobbies: []
+      hobbies: ['smoking']
     });
 
     this.signupForm.patchValue({
@@ -54,14 +56,23 @@ export class AppComponent implements OnInit {
     });
   }
 
+  public get hobbies() {
+    return this.signupForm.get('hobbies') as FormArray;
+  }
+
   public onSubmit() {
-    console.log(this.signupForm);
+    console.log('signupForm', this.signupForm);
     this.signupForm.reset();
   }
 
   public onAddHobby() {
     const control = new FormControl(null, Validators.required);
-    (this.signupForm.get("hobbies") as FormArray).push(control);
+    this.hobbies.push(control);
+
+    console.log('Hobbies value:', this.hobbies.value);
+    const hobbies = this.hobbies.value.slice();
+    hobbies[0] = 'Drinking';
+    this.hobbies.setValue(hobbies);
   }
 
   private forbiddenNames(control: FormControl): { [s: string]: boolean } {
