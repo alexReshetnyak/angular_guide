@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 import { Recipe } from '../models/recipe.model';
 import { Ingredient } from '../../shared/models/ingredient.model'
 import { ShoppingListService } from '../../shopping-list/services/shopping-list.service';
-// import { Subject, Observable } from 'rxjs';
 
 const mockRecipes = [
   new Recipe(
@@ -26,7 +26,8 @@ const mockRecipes = [
 
 @Injectable()
 export class RecipesService {
-  // private _recipeSelected: Subject<Recipe> = new Subject<Recipe>();
+  public recipesChanged = new Subject<Recipe[]>();
+
   private recipes: Recipe[] = mockRecipes;
 
   constructor(private shoppingListService: ShoppingListService) {}
@@ -39,13 +40,20 @@ export class RecipesService {
     return this.recipes[index];
   }
 
-  // public getRecipeSelected(): Observable<Recipe> {
-  //   return this._recipeSelected.asObservable();
-  // }
+  public addRecipe(recipe: Recipe): void {
+    this.recipes.push(recipe);
+    this.recipesChanged.next(this.recipes.slice());
+  }
 
-  // public setRecipeSelected(recipe: Recipe): void {
-  //   this._recipeSelected.next(recipe);
-  // }
+  public updateRecipe(index: number, newRecipe: Recipe): void {
+    this.recipes[index] = newRecipe;
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  public deleteRecipe(index: number): void {
+    this.recipes.splice(index, 1);
+    this.recipesChanged.next(this.recipes.slice());
+  }
 
   public addIngredientsToShoppingList(ingredients: Ingredient[]): void {
     this.shoppingListService.addIngredients(ingredients);
