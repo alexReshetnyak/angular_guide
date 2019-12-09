@@ -8,8 +8,10 @@
 
             <input type="text" id="username" formControlName="username" class="form-control">
 
-            <span *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched"
-              class="help-block">
+            <span
+              *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched"
+              class="help-block"
+            >
               <span *ngIf="signupForm.get('userData.username').errors['nameIsForbidden']">
                 This name is invalid!
               </span>
@@ -17,7 +19,6 @@
               <span *ngIf="signupForm.get('userData.username').errors['required']">
                 This field is required!
               </span>
-
             </span>
           </div>
 
@@ -26,8 +27,21 @@
 
             <input type="text" id="email" formControlName="email" class="form-control">
 
-            <span *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched"
-              class="help-block">
+            <hr>
+            <span
+              *ngIf="
+                signupForm.controls['userData']['controls']['email'].touched &&
+                signupForm.controls['userData']['controls']['email'].status === 'PENDING'
+                "
+              >
+              Checking...
+            </span>
+            <hr>
+
+            <span
+              *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched"
+              class="help-block"
+            >
               Please enter a valid email!
             </span>
           </div>
@@ -35,7 +49,8 @@
 
         <div class="radio" *ngFor="let gender of genders">
           <label>
-            <input type="radio" formControlName="gender" [value]="gender">{{ gender }}
+            <input type="radio" formControlName="gender" [value]="gender">
+            {{ gender }}
           </label>
         </div>
 

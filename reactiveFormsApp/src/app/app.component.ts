@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     });
 
     this.signupForm.valueChanges.subscribe(value =>
-      console.log("Value", value)
+      console.log("Value + form", value, this.signupForm)
     );
     this.signupForm.statusChanges.subscribe(status =>
       console.log("Status", status)
@@ -57,6 +57,7 @@ export class AppComponent implements OnInit {
   }
 
   public get hobbies() {
+    // return <FormArray>this.signupForm.get('hobbies');
     return this.signupForm.get('hobbies') as FormArray;
   }
 
@@ -76,16 +77,15 @@ export class AppComponent implements OnInit {
   }
 
   private forbiddenNames(control: FormControl): { [s: string]: boolean } {
-    if (this.forbiddenUsernames.indexOf(control.value) !== -1) {
+    // if (this.forbiddenUsernames.indexOf(control.value) !== -1) {
+    if (~this.forbiddenUsernames.indexOf(control.value)) {
       return { nameIsForbidden: true };
     }
     return null;
   }
 
   // * async validator
-  private forbiddenEmails(
-    control: FormControl
-  ): Promise<any> | Observable<any> {
+  private forbiddenEmails(control: FormControl): Promise<any> | Observable<any> {
     const promise = new Promise<any>((resolve, reject) => {
       setTimeout(() => {
         if (control.value === "test@test.com") {
