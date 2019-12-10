@@ -5,7 +5,7 @@ import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { RecipesService } from '../services/recipes.service';
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 
-interface recipeForm {
+interface recipeFormValue {
   name: string;
   imagePath: string;
   description: string;
@@ -35,6 +35,11 @@ export class RecipeEditComponent implements OnInit {
       this.editMode = params['id'] != null;
       this.initForm();
     });
+  }
+
+  public get ingredients(): FormArray {
+    // return <FormArray>this.signupForm.get('hobbies');
+    return this.recipeForm.get('ingredients') as FormArray;
   }
 
   public onSubmit(): void {
@@ -72,12 +77,14 @@ export class RecipeEditComponent implements OnInit {
   }
 
   private initForm(): void {
-    this.editMode ? this.initEditForm() : this.buildForm({
-      name:         '',
-      imagePath:    '',
-      description:  '',
-      ingredients:  new FormArray([])
-    });
+    this.editMode ?
+      this.initEditForm() :
+      this.buildForm({
+        name:         '',
+        imagePath:    '',
+        description:  '',
+        ingredients:  new FormArray([])
+      });
   }
 
   private initEditForm(): void {
@@ -104,7 +111,7 @@ export class RecipeEditComponent implements OnInit {
     });
   }
 
-  private buildForm(recipe: recipeForm) {
+  private buildForm(recipe: recipeFormValue): void {
     this.recipeForm = new FormGroup({
       'name': new FormControl(recipe.name, Validators.required),
       'imagePath': new FormControl(recipe.imagePath, Validators.required),

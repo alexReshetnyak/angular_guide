@@ -15,30 +15,30 @@ export class ShoppingListService {
     new Ingredient('Tomatoes', 10),
   ];
 
-  public getIngredients():Ingredient[] {
+  public getIngredients(): Ingredient[] {
     return this.ingredients.slice();
   }
 
-  public getIngredient(index: number):Ingredient {
+  public getIngredient(index: number): Ingredient {
     return this.ingredients[index];
   }
 
-  public addIngredient(ingredient: Ingredient):void {
+  public addIngredient(ingredient: Ingredient): void {
     this.ingredients.push(ingredient);
     this._ingredientsChanged.next(this.ingredients.slice());
   }
 
-  public updateIngredient(index: number, newIngredient: Ingredient):void {
+  public updateIngredient(index: number, newIngredient: Ingredient): void {
     this.ingredients[index] = newIngredient;
     this.setIngredientsChanged(this.ingredients.slice());
   }
 
-  public deleteIngredient(index: number) {
+  public deleteIngredient(index: number): void {
     this.ingredients.splice(index, 1);
     this.setIngredientsChanged([...this.ingredients]);
   }
 
-  public addIngredients(ingredients: Ingredient[]):void {
+  public addIngredients(ingredients: Ingredient[]): void {
     // for (let ingredient of ingredients) {
     //   this.addIngredient(ingredient);
     // }
@@ -46,7 +46,7 @@ export class ShoppingListService {
     this._ingredientsChanged.next(this.ingredients.slice());
   }
 
-  public setIngredientsChanged(ingredients: Ingredient[]):void {
+  public setIngredientsChanged(ingredients: Ingredient[]): void {
     this._ingredientsChanged.next(ingredients);
   }
 
