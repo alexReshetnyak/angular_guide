@@ -24,7 +24,9 @@ const mockRecipes = [
 ];
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class RecipesService {
   public recipesChanged = new Subject<Recipe[]>();
 
@@ -47,7 +49,7 @@ export class RecipesService {
 
   public updateRecipe(index: number, newRecipe: Recipe): void {
     this.recipes[index] = newRecipe;
-    this.recipesChanged.next(this.recipes.slice());
+    this.recipesChanged.next([...this.recipes]);
   }
 
   public deleteRecipe(index: number): void {
