@@ -18,7 +18,7 @@ export class PostsService {
 
   constructor(private http: HttpClient) {}
 
-  createAndStorePost(title: string, content: string) {
+  public createAndStorePost(title: string, content: string) {
     const postData: Post = { title: title, content: content };
     this.http
       .post<{ name: string }>(
@@ -38,7 +38,7 @@ export class PostsService {
       );
   }
 
-  fetchPosts() {
+  public fetchPosts() {
     let searchParams = new HttpParams();
     searchParams = searchParams.append('print', 'pretty');
     searchParams = searchParams.append('custom', 'key');
@@ -68,7 +68,7 @@ export class PostsService {
       );
   }
 
-  deletePosts() {
+  public deletePosts() {
     return this.http
       .delete(
         `${FIREBASE_URL}/posts.json`,
