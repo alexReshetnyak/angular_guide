@@ -14,7 +14,7 @@ const FIREBASE_URL = 'https://ng-kitchen-app.firebaseio.com';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
-  error = new Subject<string>();
+  public error = new Subject<string>();
 
   constructor(private http: HttpClient) {}
 
@@ -25,12 +25,12 @@ export class PostsService {
         `${FIREBASE_URL}/posts.json`,
         postData,
         {
-          observe: 'response'
+          observe: 'response' // * get full http response object with status, headers, type and body
         }
       )
       .subscribe(
         responseData => {
-          console.log(responseData);
+          console.log('Full response:', responseData);
         },
         error => {
           this.error.next(error.message);
@@ -63,6 +63,7 @@ export class PostsService {
         }),
         catchError(errorRes => {
           // Send to analytics server
+          // * create new observable with error
           return throwError(errorRes);
         })
       );
@@ -73,13 +74,21 @@ export class PostsService {
       .delete(
         `${FIREBASE_URL}/posts.json`,
         {
-          observe: 'events',
-          responseType: 'text'
+          observe: 'events',    // * observe http events
+          responseType: 'text'  // * type of response text if you don't want that angular parse json
         }
       )
       .pipe(
         tap(event => {
           console.log(event);
+          // * http hooks:
+          // * HttpEventType.Response         -  The full response including the body was received.
+          // * HttpEventType.Sent             -  The request was sent out over the wire.
+          // * HttpEventType.ResponseHeader   -  The response status code and headers were received.
+          // * HttpEventType.DownloadProgress -  A download progress event was received.
+          // * HttpEventType.UploadProgress   -  An upload progress event was received.
+          // * HttpEventType.User             -  A custom event from an interceptor or a backend.
+
           if (event.type === HttpEventType.Sent) {
             // ...
           }

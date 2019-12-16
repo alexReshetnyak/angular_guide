@@ -2,7 +2,8 @@ import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
-  HttpEventType
+  HttpEventType,
+  HttpEvent
 } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 
@@ -14,7 +15,7 @@ export class LoggingInterceptorService implements HttpInterceptor {
     console.log(req.headers);
 
     return next.handle(req).pipe(
-      tap(event => {
+      tap((event: HttpEvent<any>) => {
         if (event.type === HttpEventType.Response) {
           console.log('Incoming response');
           console.log(event.body);
