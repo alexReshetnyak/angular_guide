@@ -32,7 +32,9 @@ export class RecipesService {
 
   private recipes: Recipe[] = mockRecipes;
 
-  constructor(private shoppingListService: ShoppingListService) {}
+  constructor(
+    private shoppingListService: ShoppingListService
+  ) {}
 
   public getRecipes(): Recipe[] {
     return this.recipes.slice();
@@ -57,7 +59,13 @@ export class RecipesService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
+  public setRecipes(recipes: Recipe[]): void {
+    this.recipes = recipes;
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
   public addIngredientsToShoppingList(ingredients: Ingredient[]): void {
     this.shoppingListService.addIngredients(ingredients);
   }
+
 }

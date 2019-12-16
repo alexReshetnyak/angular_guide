@@ -1,0 +1,49 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, tap } from 'rxjs/operators';
+
+import { RecipesService } from 'src/app/recipes/services/recipes.service';
+import { Recipe } from 'src/app/recipes/models/recipe.model';
+import { Observable } from 'rxjs';
+
+const FIREBASE_URL = 'https://ng-kitchen-app.firebaseio.com';
+
+@Injectable({ providedIn: 'root' })
+export class DataStorageService {
+  constructor(
+    private http: HttpClient,
+    private recipesService: RecipesService
+  ) {}
+
+  public storeRecipes(): void {
+    const recipes = this.recipesService.getRecipes();
+    this.http
+      .put(
+        `${FIREBASE_URL}/recipes.json`,
+        recipes
+      )
+      .subscribe(response => {
+        console.log(response);
+      });
+  }
+
+  public fetchRecipes(): Observable<any> {
+    return this.http
+      .get<Recipe[]>(
+        `${FIREBASE_URL}/recipes.json`
+      )
+      .pipe(
+        map(recipes => {
+          return recipes.map(recipe => {
+            return {
+              ...recipe,
+              ingredients: recipe.ingredients ? recipe.ingredients : []
+            };
+          });
+        }),
+        tap(recipes => {
+          this.recipesService.setRecipes(recipes);
+        })
+      )
+  }
+}
