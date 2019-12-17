@@ -33,15 +33,13 @@ export class DataStorageService {
         `${FIREBASE_URL}/recipes.json`
       )
       .pipe(
-        map(recipes => {
-          return recipes.map(recipe => {
-            return {
-              ...recipe,
-              ingredients: recipe.ingredients ? recipe.ingredients : []
-            };
-          });
-        }),
-        tap(recipes => {
+        map(recipes => recipes.map(recipe => (
+          {
+            ...recipe,
+            ingredients: recipe.ingredients ? recipe.ingredients : []
+          }
+        ))),
+        tap((recipes: Recipe[]) => {
           this.recipesService.setRecipes(recipes);
         })
       )
