@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 
+import { FIREBASE_API_KEY } from 'src/app/secret';
 import { User } from '../models/user.model';
-const FIREBASE_URL = 'https://ng-kitchen-app.firebaseio.com';
+
+const FIREBASE_URL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty'
 
 export interface AuthResponseData {
   kind: string;
@@ -27,7 +29,7 @@ export class AuthService {
   signup(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=',
+        `${FIREBASE_URL}/signupNewUser?key=${FIREBASE_API_KEY}`,
         {
           email: email,
           password: password,
@@ -50,7 +52,7 @@ export class AuthService {
   login(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=',
+        `${FIREBASE_URL}/verifyPassword?key=${FIREBASE_API_KEY}`,
         {
           email: email,
           password: password,
