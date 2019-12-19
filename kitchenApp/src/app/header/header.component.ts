@@ -19,9 +19,11 @@ export class HeaderComponent {
 
   public onSaveData (): void {
     this.dataStorageService.storeRecipes();
+    this.showMenu = false;
   }
 
   public onFetchData(): void {
     this.dataStorageService.fetchRecipes().subscribe();
+    this.showMenu = false;
   }
 }

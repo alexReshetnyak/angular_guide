@@ -11,40 +11,37 @@ import { AuthService, AuthResponseData } from './services/auth.service';
   styles: ['./auth.component.scss'],
 })
 export class AuthComponent {
-  isLoginMode = true;
-  isLoading = false;
-  error: string = null;
+  public isLoginMode    = true;
+  public isLoading      = false;
+  public error: string  = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  onSwitchMode() {
+  public onSwitchMode(): void {
     this.isLoginMode = !this.isLoginMode;
   }
 
-  onSubmit(form: NgForm) {
-    if (!form.valid) {
-      return;
-    }
+  public onSubmit(form: NgForm): void {
+    if (!form.valid) { return; }
+
     const email = form.value.email;
     const password = form.value.password;
 
-    let authObs: Observable<AuthResponseData>;
-
     this.isLoading = true;
-
-    if (this.isLoginMode) {
-      authObs = this.authService.login(email, password);
-    } else {
-      authObs = this.authService.signup(email, password);
-    }
+    const authObs: Observable<AuthResponseData> =  this.isLoginMode ?
+      this.authService.login(email, password) :
+      this.authService.signup(email, password);
 
     authObs.subscribe(
-      resData => {
+      (resData: AuthResponseData) => {
         console.log(resData);
         this.isLoading = false;
         this.router.navigate(['/recipes']);
       },
-      errorMessage => {
+      (errorMessage: any) => {
         console.log(errorMessage);
         this.error = errorMessage;
         this.isLoading = false;

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
-import { throwError, BehaviorSubject } from 'rxjs';
+import { throwError, BehaviorSubject, Observable } from 'rxjs';
 
 import { FIREBASE_API_KEY } from 'src/app/secret';
 import { User } from '../models/user.model';
 
-const FIREBASE_URL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty'
+const FIREBASE_URL = 'https://identitytoolkit.googleapis.com/v1'
 
 export interface AuthResponseData {
   kind: string;
@@ -26,10 +26,10 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  signup(email: string, password: string) {
+  public signup(email: string, password: string): Observable<AuthResponseData> {
     return this.http
       .post<AuthResponseData>(
-        `${FIREBASE_URL}/signupNewUser?key=${FIREBASE_API_KEY}`,
+        `${FIREBASE_URL}/accounts:signUp?key=${FIREBASE_API_KEY}`,
         {
           email: email,
           password: password,
@@ -49,10 +49,10 @@ export class AuthService {
       );
   }
 
-  login(email: string, password: string) {
+  public login(email: string, password: string): Observable<AuthResponseData> {
     return this.http
       .post<AuthResponseData>(
-        `${FIREBASE_URL}/verifyPassword?key=${FIREBASE_API_KEY}`,
+        `${FIREBASE_URL}/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
         {
           email: email,
           password: password,
@@ -72,16 +72,15 @@ export class AuthService {
       );
   }
 
-  autoLogin() {
+  public autoLogin(): void {
     const userData: {
       email: string;
       id: string;
       _token: string;
       _tokenExpirationDate: string;
     } = JSON.parse(localStorage.getItem('userData'));
-    if (!userData) {
-      return;
-    }
+
+    if (!userData) { return; }
 
     const loadedUser = new User(
       userData.email,
@@ -99,17 +98,16 @@ export class AuthService {
     }
   }
 
-  logout() {
+  public logout(): void {
     this.user.next(null);
     this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
-    }
+
+    this.tokenExpirationTimer && clearTimeout(this.tokenExpirationTimer);
     this.tokenExpirationTimer = null;
   }
 
-  autoLogout(expirationDuration: number) {
+  public autoLogout(expirationDuration: number): void {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
@@ -128,7 +126,7 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
-  private handleError(errorRes: HttpErrorResponse) {
+  private handleError(errorRes: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
     if (!errorRes.error || !errorRes.error.error) {
       return throwError(errorMessage);
