@@ -20,6 +20,7 @@
         class="nav-item"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{exact: true}"
+        *ngIf="isAuthenticated"
       >
         <a
           (click)="showMenu = false"
@@ -27,6 +28,21 @@
           routerLink="/recipes"
         >
           Recipes <span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        *ngIf="!isAuthenticated"
+        [routerLinkActiveOptions]="{exact: true}"
+      >
+        <a
+          (click)="showMenu = false"
+          class="nav-link"
+          routerLink="/auth"
+        >
+          Authentication
         </a>
       </li>
 
@@ -45,7 +61,7 @@
       </li>
     </ul>
 
-    <div class="nav-item dropdown" appDropdown cssClass="show">
+    <div class="nav-item dropdown" appDropdown cssClass="show" *ngIf="isAuthenticated">
       <a
         class="nav-link dropdown-toggle"
         id="navbarDropdown"
@@ -59,8 +75,9 @@
       </a>
 
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" style="cursor: pointer;" (click)="onSaveData()">Save Data</a>
+        <a class="dropdown-item" style="cursor: pointer;">Logout</a>
         <div class="dropdown-divider"></div>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="onSaveData()">Save Data</a>
         <a class="dropdown-item" style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a>
       </div>
     </div>
