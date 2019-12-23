@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 
+import { Observable } from 'rxjs';
 import { RecipesService } from 'src/app/recipes/services/recipes.service';
 import { Recipe } from 'src/app/recipes/models/recipe.model';
-import { Observable } from 'rxjs';
 
 const FIREBASE_URL = 'https://ng-kitchen-app.firebaseio.com';
 
@@ -12,7 +12,7 @@ const FIREBASE_URL = 'https://ng-kitchen-app.firebaseio.com';
 export class DataStorageService {
   constructor(
     private http: HttpClient,
-    private recipesService: RecipesService
+    private recipesService: RecipesService,
   ) {}
 
   public storeRecipes(): void {

@@ -119,7 +119,7 @@ export class AuthService {
     userId: string,
     token: string,
     expiresIn: number
-  ) {
+  ): void {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
     this.user.next(user);
