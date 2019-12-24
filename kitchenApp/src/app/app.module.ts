@@ -18,10 +18,12 @@ import { ShoppingEditComponent }  from './shopping-list/shopping-edit/shopping-e
 import { RecipeEditComponent }    from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeStartComponent }   from './recipes/recipe-start/recipe-start.component';
 
-import { DropdownDirective } from './shared/directives/dropdown/dropdown.directive';
-import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
-import { AuthComponent } from './auth/auth.component';
-import { AuthInterceptorService } from './auth/services/auth-interceptor.service';
+import { DropdownDirective }        from './shared/directives/dropdown/dropdown.directive';
+import { LoadingSpinnerComponent }  from './shared/components/loading-spinner/loading-spinner.component';
+import { AuthComponent }            from './auth/auth.component';
+import { AuthInterceptorService }   from './auth/services/auth-interceptor.service';
+import { PlaceholderDirective }     from './shared/directives/placeholder/placeholder.directive';
+import { AlertComponent }           from './shared/components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { AuthInterceptorService } from './auth/services/auth-interceptor.service
     RecipeEditComponent,
     RecipeStartComponent,
     LoadingSpinnerComponent,
-    AuthComponent
+    AuthComponent,
+    PlaceholderDirective,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +56,9 @@ import { AuthInterceptorService } from './auth/services/auth-interceptor.service
       useClass: AuthInterceptorService,
       multi: true
     }
+  ],
+  entryComponents: [
+    AlertComponent
   ],
   bootstrap: [AppComponent]
 })
