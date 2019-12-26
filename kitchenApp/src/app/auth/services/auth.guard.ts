@@ -5,10 +5,14 @@ import { map, take } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
+import { CoreModule } from 'src/app/core.module';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: CoreModule })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   public canActivate (
     route: ActivatedRouteSnapshot,
