@@ -57,7 +57,7 @@ import { AlertComponent }           from './shared/components/alert/alert.compon
       multi: true
     }
   ],
-  entryComponents: [
+  entryComponents: [ // * for dynamic components
     AlertComponent
   ],
   bootstrap: [AppComponent]
