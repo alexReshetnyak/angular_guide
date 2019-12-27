@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SharedModule } from '../shared.module';
 
-@Injectable({ providedIn: SharedModule })
+@Injectable({ providedIn: 'root' })
 export class LoggingService {
   private lastLog: string;
 

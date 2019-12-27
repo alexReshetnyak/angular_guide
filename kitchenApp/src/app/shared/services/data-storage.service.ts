@@ -23,9 +23,7 @@ export class DataStorageService {
         `${FIREBASE_URL}/recipes.json`,
         recipes
       )
-      .subscribe(response => {
-        console.log(response);
-      });
+      .subscribe(response => console.log(response));
   }
 
   public fetchRecipes(): Observable<any> {
