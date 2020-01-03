@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from './auth/services/auth.service';
-import { LoggingService } from './shared/services/logging.service';
 
 // * git-secret to safe api keys
 // * 1) brew install git-secret
@@ -26,11 +25,9 @@ import { LoggingService } from './shared/services/logging.service';
 export class AppComponent  implements OnInit {
   constructor(
     private authService: AuthService,
-    private loggingService: LoggingService,
   ){}
 
   ngOnInit() {
     this.authService.autoLogin();
-    this.loggingService.printLog('Hello from AppComponent ngOnInit');
   }
 }

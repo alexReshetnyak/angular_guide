@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 
 import { Ingredient } from '../../shared/models/ingredient.model';
-import { CoreModule } from 'src/app/core.module';
+import { CoreModule } from 'src/app/core/core.module';
 
 @Injectable({
   providedIn: CoreModule

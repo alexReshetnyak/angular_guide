@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { Recipe } from '../models/recipe.model';
 import { Ingredient } from '../../shared/models/ingredient.model'
 import { ShoppingListService } from '../../shopping-list/services/shopping-list.service';
-import { CoreModule } from 'src/app/core.module';
+import { CoreModule } from 'src/app/core/core.module';
 
 // const mockRecipes = [
 //   new Recipe(

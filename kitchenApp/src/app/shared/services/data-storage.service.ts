@@ -5,7 +5,7 @@ import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { RecipesService } from 'src/app/recipes/services/recipes.service';
 import { Recipe } from 'src/app/recipes/models/recipe.model';
-import { CoreModule } from 'src/app/core.module';
+import { CoreModule } from 'src/app/core/core.module';
 
 const FIREBASE_URL = 'https://ng-kitchen-app.firebaseio.com';
 
