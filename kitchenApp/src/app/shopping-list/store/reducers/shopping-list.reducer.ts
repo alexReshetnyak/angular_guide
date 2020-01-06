@@ -1,4 +1,4 @@
-import * as ShoppingListActions from '../actions/shopping-list.action';
+import * as ShoppingListActions from '../actions/shopping-list.actions';
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 
 
