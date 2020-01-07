@@ -78,6 +78,7 @@ export class AppComponent implements OnInit {
 
   private forbiddenNames(control: FormControl): { [s: string]: boolean } {
     // if (this.forbiddenUsernames.indexOf(control.value) !== -1) {
+    // tslint:disable-next-line: no-bitwise
     if (~this.forbiddenUsernames.indexOf(control.value)) {
       return { nameIsForbidden: true };
     }

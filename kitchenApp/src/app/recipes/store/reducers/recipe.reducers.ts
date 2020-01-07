@@ -5,7 +5,7 @@ import * as RecipeActions from '../actions/recipe.actions';
 import * as fromApp       from '../../../store/app.reducers';
 
 export interface FeatureState extends fromApp.AppState {
-  recipes: State
+  recipes: State;
 }
 
 export interface State {
@@ -54,7 +54,7 @@ export function recipeReducer(state = initialState, action: RecipeActions.Recipe
       recipes[action.payload.index] = updatedRecipe;
       return {
         ...state,
-        recipes: recipes
+        recipes
       };
     case (RecipeActions.DELETE_RECIPE):
       const oldRecipes = [...state.recipes];

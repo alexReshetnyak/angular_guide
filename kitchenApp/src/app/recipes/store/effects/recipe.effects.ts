@@ -24,8 +24,8 @@ export class RecipeEffects {
     )),
     map((recipes) => {
       console.log(recipes);
-      for (let recipe of recipes) {
-        if (!recipe['ingredients']) { recipe['ingredients'] = []; }
+      for (const recipe of recipes) {
+        if (!recipe.ingredients) { recipe.ingredients = []; }
       }
       return {
         type: RecipeActions.SET_RECIPES,
