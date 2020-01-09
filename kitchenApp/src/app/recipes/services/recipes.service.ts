@@ -1,29 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { Recipe } from '../models/recipe.model';
 import { Ingredient } from '../../shared/models/ingredient.model'
 import { ShoppingListService } from '../../shopping-list/services/shopping-list.service';
 import { CoreModule } from 'src/app/core/core.module';
 
-// const mockRecipes = [
-//   new Recipe(
-//     'Tasty Schnitzel',
-//     'A super-tasty Schnitzel - just awesome!',
-//     'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
-//     [
-//       new Ingredient('Meat', 1),
-//       new Ingredient('French Fries', 20)
-//     ]),
-//   new Recipe('Big Fat Burger',
-//     'What else you need to say?',
-//     'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
-//     [
-//       new Ingredient('Buns', 2),
-//       new Ingredient('Meat', 1)
-//     ])
-// ];
-
+import * as shoppingListActions from '../../shopping-list/store/actions/shopping-list.actions';
 
 @Injectable({
   providedIn: CoreModule
@@ -34,7 +18,8 @@ export class RecipesService {
   private recipes: Recipe[] = [];
 
   constructor(
-    private shoppingListService: ShoppingListService
+    private shoppingListService: ShoppingListService,
+    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>,
   ) {}
 
   public getRecipes(): Recipe[] {
@@ -66,7 +51,7 @@ export class RecipesService {
   }
 
   public addIngredientsToShoppingList(ingredients: Ingredient[]): void {
-    this.shoppingListService.addIngredients(ingredients);
+    this.store.dispatch(new shoppingListActions.AddIngredients(ingredients));
   }
 
 }

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { map, tap, switchMap, mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs';
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import * as AuthActions from '../actions/auth.actions';
 
 @Injectable()
@@ -13,9 +13,9 @@ export class AuthEffects {
   public authSignup = this.actions$.pipe(
     ofType(AuthActions.TRY_SIGNUP),
     map((action: AuthActions.TrySignup) => action.payload),
-    switchMap((authData: { username: string, password: string }) => {
-      return from(firebase.auth().createUserWithEmailAndPassword(authData.username, authData.password));
-    }),
+    switchMap((authData: { username: string, password: string }) => (
+      from(firebase.auth().createUserWithEmailAndPassword(authData.username, authData.password))
+    )),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     mergeMap((token: string) => [
       {

@@ -1,8 +1,7 @@
 
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 
-import * as ShoppingListActions from '../actions/shopping-list.actions';
-
+import { ShoppingListTypes, ShoppingListActions } from '../actions/shopping-list.actions';
 
 export interface State {
   ingredients: Ingredient[];
@@ -16,52 +15,58 @@ const initialState: State = {
     new Ingredient('Tomatoes', 10),
   ],
   editedIngredient: null,
-  editedIngredientIndex: -1
+  editedIngredientIndex: -1,
 };
 
 export function shoppingListReducer(
   state = initialState,
-  action: ShoppingListActions.ShoppingListActions
+  action: ShoppingListActions
 ) {
   switch (action.type) {
-    case ShoppingListActions.ADD_INGREDIENT:
+    case ShoppingListTypes.ADD_INGREDIENT:
       return {
         ...state,
         ingredients: [...state.ingredients, action.payload]
       };
 
-    case ShoppingListActions.ADD_INGREDIENTS:
+    case ShoppingListTypes.ADD_INGREDIENTS:
       return {
         ...state,
         ingredients: [...state.ingredients, ...action.payload]
       };
 
-    case ShoppingListActions.UPDATE_INGREDIENT:
-      const ingredient = state.ingredients[state.editedIngredientIndex];
+    case ShoppingListTypes.UPDATE_INGREDIENT:
+      // const ingredient = state.ingredients[state.editedIngredientIndex];
+      const { payload: { index } } = action;
+      const ingredient = state.ingredients[index];
       const updatedIngredient = {
         ...ingredient,
         ...action.payload.ingredient
       };
-      const ingredients = [...state.ingredients];
-      ingredients[state.editedIngredientIndex] = updatedIngredient;
+      // const ingredients = [...state.ingredients];
+      // ingredients[state.editedIngredientIndex] = updatedIngredient;
+      const updatedIngredients = [...state.ingredients];
+      updatedIngredients[index] = updatedIngredient;
       return {
         ...state,
-        ingredients,
+        // ingredients,
+        ingredients: updatedIngredients,
         editedIngredient: null,
         editedIngredientIndex: -1
       };
 
-    case ShoppingListActions.DELETE_INGREDIENT:
-      const oldIngredients = [...state.ingredients];
-      oldIngredients.splice(state.editedIngredientIndex, 1);
+    case ShoppingListTypes.DELETE_INGREDIENT:
+      // const oldIngredients = [...state.ingredients];
+      // oldIngredients.splice(state.editedIngredientIndex, 1);
       return {
         ...state,
-        ingredients: oldIngredients,
+        // ingredients: oldIngredients,
+        ingredients: state.ingredients.filter((ing, i) => i !== action.payload.index),
         editedIngredient: null,
         editedIngredientIndex: -1
       };
 
-    case ShoppingListActions.START_EDIT:
+    case ShoppingListTypes.START_EDIT:
       const editedIngredient = {...state.ingredients[action.payload]};
       return {
         ...state,
@@ -69,7 +74,7 @@ export function shoppingListReducer(
         editedIngredientIndex: action.payload
       };
 
-    case ShoppingListActions.STOP_EDIT:
+    case ShoppingListTypes.STOP_EDIT:
       return {
         ...state,
         editedIngredient: null,

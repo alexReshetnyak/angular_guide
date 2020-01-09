@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.store.select('auth').subscribe(data => console.log('Auth data', data), err => console.log('Auth Error:', err));
     this.authState = this.store.select('auth');
   }
 

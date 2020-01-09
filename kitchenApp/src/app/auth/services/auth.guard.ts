@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
   ): Observable<boolean> {
     return this.store.select('auth').pipe(
       take(1),
-      map((authState: fromAuth.State) => authState.authenticated)
+      map((authState: fromAuth.State) => authState && authState.authenticated)
     );
   }
 }
