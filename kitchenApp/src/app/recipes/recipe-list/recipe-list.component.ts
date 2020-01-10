@@ -3,8 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { Recipe } from '../models/recipe.model';
-
 import * as fromRecipe from '../store/reducers/recipe.reducers';
 
 

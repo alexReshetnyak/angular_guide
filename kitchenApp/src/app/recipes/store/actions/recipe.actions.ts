@@ -1,43 +1,46 @@
 import { Action } from '@ngrx/store';
 import { Recipe } from '../../models/recipe.model';
 
-export const SET_RECIPES = 'SET_RECIPES';
-export const ADD_RECIPE = 'ADD_RECIPE';
-export const UPDATE_RECIPE = 'UPDATE_RECIPE';
-export const DELETE_RECIPE = 'DELETE_RECIPE';
-export const STORE_RECIPES = 'STORE_RECIPES';
-export const FETCH_RECIPES = 'FETCH_RECIPES';
+
+export enum RecipeTypes {
+  SET_RECIPES   = 'SET_RECIPES',
+  ADD_RECIPE    = 'ADD_RECIPE',
+  UPDATE_RECIPE = 'UPDATE_RECIPE',
+  DELETE_RECIPE = 'DELETE_RECIPE',
+  STORE_RECIPES = 'STORE_RECIPES',
+  FETCH_RECIPES = 'FETCH_RECIPES',
+}
 
 export class SetRecipes implements Action {
-  readonly type = SET_RECIPES;
+  readonly type = RecipeTypes.SET_RECIPES;
 
   constructor(public payload: Recipe[]) {}
 }
 
 export class AddRecipe implements Action {
-  readonly type = ADD_RECIPE;
+  readonly type = RecipeTypes.ADD_RECIPE;
 
   constructor(public payload: Recipe) {}
 }
 
 export class UpdateRecipe implements Action {
-  readonly type = UPDATE_RECIPE;
+  readonly type = RecipeTypes.UPDATE_RECIPE;
 
   constructor(public payload: {index: number, updatedRecipe: Recipe}) {}
 }
 
 export class DeleteRecipe implements Action {
-  readonly type = DELETE_RECIPE;
+  readonly type = RecipeTypes.DELETE_RECIPE;
 
   constructor(public payload: number) {}
 }
 
 export class StoreRecipes implements Action {
-  readonly type = STORE_RECIPES;
+  readonly type = RecipeTypes.STORE_RECIPES;
 }
 
 export class FetchRecipes implements Action {
-  readonly type = FETCH_RECIPES;
+  readonly type = RecipeTypes.FETCH_RECIPES;
 }
 
 export type RecipeActions = SetRecipes |

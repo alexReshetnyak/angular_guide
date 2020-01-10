@@ -15,7 +15,7 @@ const FIREBASE_URL = 'https://ng-kitchen-app.firebaseio.com';
 export class RecipeEffects {
   @Effect()
   public recipeFetch = this.actions$.pipe(
-    ofType(RecipeActions.FETCH_RECIPES),
+    ofType(RecipeActions.RecipeTypes.FETCH_RECIPES),
     switchMap((action: RecipeActions.FetchRecipes) => (
       this.httpClient.get<Recipe[]>(`${FIREBASE_URL}/recipes.json`, {
         observe: 'body',
@@ -28,7 +28,7 @@ export class RecipeEffects {
         if (!recipe.ingredients) { recipe.ingredients = []; }
       }
       return {
-        type: RecipeActions.SET_RECIPES,
+        type: RecipeActions.RecipeTypes.SET_RECIPES,
         payload: recipes
       };
     })
@@ -36,7 +36,7 @@ export class RecipeEffects {
 
   @Effect({dispatch: false})
   public recipeStore = this.actions$.pipe(
-    ofType(RecipeActions.STORE_RECIPES),
+    ofType(RecipeActions.RecipeTypes.STORE_RECIPES),
     withLatestFrom(this.store.select('recipes')),
     switchMap(([action, state]) => {
       const req = new HttpRequest(

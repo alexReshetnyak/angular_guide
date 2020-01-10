@@ -8,6 +8,7 @@ import { ShoppingListService } from '../../shopping-list/services/shopping-list.
 import { CoreModule } from 'src/app/core/core.module';
 
 import * as shoppingListActions from '../../shopping-list/store/actions/shopping-list.actions';
+import * as fromApp from '../../store/app.reducers';
 
 @Injectable({
   providedIn: CoreModule
@@ -18,8 +19,7 @@ export class RecipesService {
   private recipes: Recipe[] = [];
 
   constructor(
-    private shoppingListService: ShoppingListService,
-    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>,
+    private store: Store<fromApp.AppState>,
   ) {}
 
   public getRecipes(): Recipe[] {

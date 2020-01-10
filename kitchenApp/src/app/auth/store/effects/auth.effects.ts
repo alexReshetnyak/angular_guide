@@ -11,7 +11,7 @@ import * as AuthActions from '../actions/auth.actions';
 export class AuthEffects {
   @Effect()
   public authSignup = this.actions$.pipe(
-    ofType(AuthActions.TRY_SIGNUP),
+    ofType(AuthActions.AuthTypes.TRY_SIGNUP),
     map((action: AuthActions.TrySignup) => action.payload),
     switchMap((authData: { username: string, password: string }) => (
       from(firebase.auth().createUserWithEmailAndPassword(authData.username, authData.password))
@@ -19,10 +19,10 @@ export class AuthEffects {
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     mergeMap((token: string) => [
       {
-        type: AuthActions.SIGNUP
+        type: AuthActions.AuthTypes.SIGNUP
       },
       {
-        type: AuthActions.SET_TOKEN,
+        type: AuthActions.AuthTypes.SET_TOKEN,
         payload: token
       }
     ])
@@ -30,7 +30,7 @@ export class AuthEffects {
 
   @Effect()
   public authSignin = this.actions$.pipe(
-    ofType(AuthActions.TRY_SIGNIN),
+    ofType(AuthActions.AuthTypes.TRY_SIGNIN),
     map((action: AuthActions.TrySignup) => action.payload),
     switchMap((authData: { username: string, password: string }) => {
       return from(firebase.auth().signInWithEmailAndPassword(authData.username, authData.password));
@@ -40,10 +40,10 @@ export class AuthEffects {
       this.router.navigate(['/']);
       return [
         {
-          type: AuthActions.SIGNIN
+          type: AuthActions.AuthTypes.SIGNIN
         },
         {
-          type: AuthActions.SET_TOKEN,
+          type: AuthActions.AuthTypes.SET_TOKEN,
           payload: token
         }
       ];
@@ -52,7 +52,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   authLogout = this.actions$.pipe(
-    ofType(AuthActions.LOGOUT),
+    ofType(AuthActions.AuthTypes.LOGOUT),
     tap(() => { this.router.navigate(['/']); })
   );
 

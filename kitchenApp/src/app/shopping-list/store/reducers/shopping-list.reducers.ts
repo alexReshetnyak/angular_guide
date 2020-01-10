@@ -19,7 +19,7 @@ const initialState: State = {
 };
 
 export function shoppingListReducer(
-  state = initialState,
+  state: State = initialState,
   action: ShoppingListActions
 ) {
   switch (action.type) {
@@ -36,32 +36,26 @@ export function shoppingListReducer(
       };
 
     case ShoppingListTypes.UPDATE_INGREDIENT:
-      // const ingredient = state.ingredients[state.editedIngredientIndex];
-      const { payload: { index } } = action;
-      const ingredient = state.ingredients[index];
+      const ingredient = state.ingredients[state.editedIngredientIndex];
       const updatedIngredient = {
         ...ingredient,
-        ...action.payload.ingredient
+        ...action.payload
       };
-      // const ingredients = [...state.ingredients];
-      // ingredients[state.editedIngredientIndex] = updatedIngredient;
       const updatedIngredients = [...state.ingredients];
-      updatedIngredients[index] = updatedIngredient;
+      updatedIngredients[state.editedIngredientIndex] = updatedIngredient;
       return {
         ...state,
-        // ingredients,
         ingredients: updatedIngredients,
         editedIngredient: null,
         editedIngredientIndex: -1
       };
 
     case ShoppingListTypes.DELETE_INGREDIENT:
-      // const oldIngredients = [...state.ingredients];
-      // oldIngredients.splice(state.editedIngredientIndex, 1);
+      const oldIngredients = [...state.ingredients];
+      oldIngredients.splice(state.editedIngredientIndex, 1);
       return {
         ...state,
-        // ingredients: oldIngredients,
-        ingredients: state.ingredients.filter((ing, i) => i !== action.payload.index),
+        ingredients: oldIngredients,
         editedIngredient: null,
         editedIngredientIndex: -1
       };
