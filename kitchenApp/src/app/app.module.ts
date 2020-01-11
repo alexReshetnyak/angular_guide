@@ -7,10 +7,11 @@ import { StoreModule }                  from '@ngrx/store';
 import { EffectsModule }                from '@ngrx/effects';
 // import { StoreRouterConnectingModule }  from '@ngrx/router-store';
 
-import { CoreModule }           from './core/core.module';
-import { AppComponent }         from './app.component';
-import { AuthEffects }          from './auth/store/effects/auth.effects';
-import { reducers }             from './store/app.reducers';
+import { AuthModule }   from './auth/auth.module';
+import { CoreModule }   from './core/core.module';
+import { AppComponent } from './app.component';
+import { AuthEffects }  from './auth/store/effects/auth.effects';
+import { reducers }     from './store/app.reducers';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { reducers }             from './store/app.reducers';
   imports: [
     BrowserModule,
     HttpClientModule,
+    AuthModule,
     CoreModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([AuthEffects]),

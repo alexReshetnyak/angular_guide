@@ -17,8 +17,8 @@ export class SigninComponent {
     const email = form.value.email;
     const password = form.value.password;
     this.store.dispatch(new AuthActions.TrySignin({
-      username: email, 
-      password: password
+      username: email,
+      password,
     }));
   }
 

@@ -7,13 +7,18 @@ import { from } from 'rxjs';
 import * as firebase from 'firebase/app';
 import * as AuthActions from '../actions/auth.actions';
 
+interface User {
+  username: string;
+  password: string;
+}
+
 @Injectable()
 export class AuthEffects {
   @Effect()
   public authSignup = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.TRY_SIGNUP),
     map((action: AuthActions.TrySignup) => action.payload),
-    switchMap((authData: { username: string, password: string }) => (
+    switchMap((authData: User) => (
       from(firebase.auth().createUserWithEmailAndPassword(authData.username, authData.password))
     )),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
@@ -32,8 +37,11 @@ export class AuthEffects {
   public authSignin = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.TRY_SIGNIN),
     map((action: AuthActions.TrySignup) => action.payload),
-    switchMap((authData: { username: string, password: string }) => {
-      return from(firebase.auth().signInWithEmailAndPassword(authData.username, authData.password));
+    switchMap((authData: User) => {
+      console.log('Firebase:', firebase);
+      return from(
+        firebase.auth().signInWithEmailAndPassword(authData.username, authData.password)
+      );
     }),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     mergeMap((token: string) => {

@@ -7,7 +7,7 @@ import { throwError, BehaviorSubject, Observable } from 'rxjs';
 import { FIREBASE_API_KEY } from 'src/app/secret';
 import { User } from '../models/user.model';
 
-const FIREBASE_URL = 'https://identitytoolkit.googleapis.com/v1'
+const FIREBASE_URL = 'https://identitytoolkit.googleapis.com/v1';
 
 export interface AuthResponseData {
   kind: string;
@@ -32,8 +32,8 @@ export class AuthService {
       .post<AuthResponseData>(
         `${FIREBASE_URL}/accounts:signUp?key=${FIREBASE_API_KEY}`,
         {
-          email: email,
-          password: password,
+          email,
+          password,
           returnSecureToken: true
         }
       )
@@ -55,8 +55,8 @@ export class AuthService {
       .post<AuthResponseData>(
         `${FIREBASE_URL}/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
         {
-          email: email,
-          password: password,
+          email,
+          password,
           returnSecureToken: true
         }
       )
