@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { map, tap, switchMap, mergeMap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { from, OperatorFunction } from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import * as AuthActions from '../actions/auth.actions';
@@ -38,14 +38,13 @@ export class AuthEffects {
     ofType(AuthActions.AuthTypes.TRY_SIGNIN),
     map((action: AuthActions.TrySignup) => action.payload),
     switchMap((authData: User) => {
-      console.log('Firebase:', firebase);
       return from(
         firebase.auth().signInWithEmailAndPassword(authData.username, authData.password)
       );
     }),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     mergeMap((token: string) => {
-      this.router.navigate(['/']);
+      console.log('Auth Effects token', token);
       return [
         {
           type: AuthActions.AuthTypes.SIGNIN
@@ -55,6 +54,10 @@ export class AuthEffects {
           payload: token
         }
       ];
+    }),
+    tap(action => {
+      console.log('Action:', action);
+      action.payload && this.router.navigate(['/']);
     })
   );
 
@@ -66,5 +69,6 @@ export class AuthEffects {
 
   constructor(
     private actions$: Actions,
-    private router: Router) {}
+    private router: Router
+  ) {}
 }

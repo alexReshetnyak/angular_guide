@@ -20,7 +20,7 @@ export class SignupComponent {
 
     this.store.dispatch(new AuthActions.TrySignup({
       username: email,
-      password: password
+      password,
     }));
   }
 

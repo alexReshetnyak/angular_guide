@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 
 import { AuthService } from './auth/services/auth.service';
+import { FIREBASE_API_KEY, FIREBASE_URL } from './secret';
 
 // * git-secret to safe api keys
 // * 1) brew install git-secret
@@ -25,9 +28,13 @@ import { AuthService } from './auth/services/auth.service';
 export class AppComponent  implements OnInit {
   constructor(
     private authService: AuthService,
-  ){}
+  ) {}
 
   ngOnInit() {
+    firebase.initializeApp({
+      apiKey: FIREBASE_API_KEY,
+      authDomain: FIREBASE_URL,
+    });
     this.authService.autoLogin();
   }
 }

@@ -5,11 +5,11 @@ import { HttpClient, HttpRequest } from '@angular/common/http';
 import { switchMap, withLatestFrom, map } from 'rxjs/operators';
 
 import { Recipe } from '../../models/recipe.model';
+import { FIREBASE_URL } from 'src/app/secret';
 
 import * as RecipeActions from '../actions/recipe.actions';
 import * as fromRecipe    from '../reducers/recipe.reducers';
 
-const FIREBASE_URL = 'https://ng-kitchen-app.firebaseio.com';
 
 @Injectable()
 export class RecipeEffects {
