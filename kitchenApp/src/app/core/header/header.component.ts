@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
@@ -24,11 +24,11 @@ export class HeaderComponent implements OnInit {
     this.authState = this.store.select('auth');
   }
 
-  public toggleMenu():void {
+  public toggleMenu(): void {
     this.showMenu = !this.showMenu;
   }
 
-  public onSaveData (): void {
+  public onSaveData(): void {
     this.store.dispatch(new RecipeActions.StoreRecipes());
     this.showMenu = false;
   }

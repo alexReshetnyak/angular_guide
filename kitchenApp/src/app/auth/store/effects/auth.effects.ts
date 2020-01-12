@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { map, tap, switchMap, mergeMap } from 'rxjs/operators';
-import { from, OperatorFunction } from 'rxjs';
+import { map, tap, switchMap, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { from } from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import * as AuthActions from '../actions/auth.actions';
+import * as fromApp from '../../../store/app.reducers';
+
 
 interface User {
   username: string;
@@ -56,19 +59,59 @@ export class AuthEffects {
       ];
     }),
     tap(action => {
-      console.log('Action:', action);
       action.payload && this.router.navigate(['/']);
     })
   );
 
   @Effect({ dispatch: false })
-  authLogout = this.actions$.pipe(
+  public authLogout = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.LOGOUT),
     tap(() => { this.router.navigate(['/']); })
   );
 
+
+  @Effect()
+  public authAutoLogin = this.actions$.pipe(
+    ofType(AuthActions.AuthTypes.AUTO_LOGIN),
+    withLatestFrom(this.store$),
+    map(([action, storeState]) => {
+      const userData: {
+        _token: string;
+        _tokenExpirationDate: string;
+      } = JSON.parse(localStorage.getItem('userData'));
+
+      if (!userData) { return; }
+
+      if (userData._token) {
+        const expirationDuration =
+          new Date(userData._tokenExpirationDate).getTime() -
+          new Date().getTime();
+        return [
+          {
+            type: AuthActions.AuthTypes.AUTO_LOGOUT,
+            payload: expirationDuration,
+          },
+          {
+            type: AuthActions.AuthTypes.SIGNIN
+          },
+          {
+            type: AuthActions.AuthTypes.SET_TOKEN,
+            payload: userData._token
+          }
+        ];
+      }
+    })
+  );
+
+  @Effect()
+  public authAutoLogout = this.actions$.pipe(
+    ofType(AuthActions.AuthTypes.AUTO_LOGOUT),
+    tap()
+  );
+
   constructor(
     private actions$: Actions,
-    private router: Router
+    private store$: Store<fromApp.AppState>,
+    private router: Router,
   ) {}
 }
