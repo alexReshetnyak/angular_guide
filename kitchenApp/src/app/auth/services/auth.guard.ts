@@ -21,7 +21,6 @@ export class AuthGuard implements CanActivate {
     return this.store.select('auth').pipe(
       take(1),
       map((authState: fromAuth.State) => {
-        console.log('Navigate:', authState);
         !authState || !authState.authenticated && this.router.navigate(['/signin']);
         return authState && authState.authenticated;
       })

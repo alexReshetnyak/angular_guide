@@ -1,14 +1,15 @@
 import { Action } from '@ngrx/store';
 
 export enum AuthTypes {
-  TRY_SIGNUP  = 'TRY_SIGNUP',
-  SIGNUP      = 'SIGNUP',
-  TRY_SIGNIN  = 'TRY_SIGNIN',
-  SIGNIN      = 'SIGNIN',
-  LOGOUT      = 'LOGOUT',
-  SET_TOKEN   = 'SET_TOKEN',
-  AUTO_LOGIN  = 'AUTO_LOGIN',
-  AUTO_LOGOUT = 'AUTO_LOGOUT',
+  TRY_SIGNUP                = 'TRY_SIGNUP',
+  SIGNUP                    = 'SIGNUP',
+  TRY_SIGNIN                = 'TRY_SIGNIN',
+  SIGNIN                    = 'SIGNIN',
+  LOGOUT                    = 'LOGOUT',
+  SET_TOKEN                 = 'SET_TOKEN',
+  SET_TOKEN_EXPIRATION_DATE = 'SET_TOKEN_EXPIRATION_DATE',
+  AUTO_LOGIN                = 'AUTO_LOGIN',
+  AUTO_LOGOUT               = 'AUTO_LOGOUT',
 }
 
 export class TrySignup implements Action {
@@ -41,6 +42,12 @@ export class SetToken implements Action {
   constructor(public payload: string) {}
 }
 
+export class SetTokenExpirationDate implements Action {
+  readonly type = AuthTypes.SET_TOKEN_EXPIRATION_DATE;
+
+  constructor(public payload: Date) {}
+}
+
 export class AutoLogin implements Action {
   readonly type = AuthTypes.AUTO_LOGIN;
 }
@@ -50,11 +57,12 @@ export class AutoLogout implements Action {
 }
 
 export type AuthActions =
-  TrySignup |
-  TrySignin |
-  Signup    |
-  Signin    |
-  Logout    |
-  SetToken  |
-  AutoLogin |
+  TrySignup               |
+  TrySignin               |
+  Signup                  |
+  Signin                  |
+  Logout                  |
+  SetToken                |
+  SetTokenExpirationDate  |
+  AutoLogin               |
   AutoLogout;

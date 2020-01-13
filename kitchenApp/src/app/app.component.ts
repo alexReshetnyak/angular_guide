@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
-import { AuthService } from './auth/services/auth.service';
 import { FIREBASE_API_KEY, FIREBASE_URL } from './secret';
+
+import * as fromApp from './store/app.reducers';
+import * as AuthActions from './auth/store/actions/auth.actions';
 
 // * git-secret to safe api keys
 // * 1) brew install git-secret
@@ -27,7 +30,7 @@ import { FIREBASE_API_KEY, FIREBASE_URL } from './secret';
 })
 export class AppComponent  implements OnInit {
   constructor(
-    private authService: AuthService,
+    private store: Store<fromApp.AppState>,
   ) {}
 
   ngOnInit() {
@@ -35,6 +38,6 @@ export class AppComponent  implements OnInit {
       apiKey: FIREBASE_API_KEY,
       authDomain: FIREBASE_URL,
     });
-    this.authService.autoLogin();
+    this.store.dispatch(new AuthActions.AutoLogin());
   }
 }

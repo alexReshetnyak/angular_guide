@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { map, tap, switchMap, mergeMap, withLatestFrom } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { map, tap, switchMap, mergeMap, withLatestFrom, flatMap, delay } from 'rxjs/operators';
+import { from, timer } from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import * as AuthActions from '../actions/auth.actions';
@@ -74,39 +74,72 @@ export class AuthEffects {
   public authAutoLogin = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.AUTO_LOGIN),
     withLatestFrom(this.store$),
-    map(([action, storeState]) => {
+    mergeMap(([action, storeState]) => {
       const userData: {
         _token: string;
         _tokenExpirationDate: string;
       } = JSON.parse(localStorage.getItem('userData'));
 
-      if (!userData) { return; }
+      console.log('Auth effect, userData:', userData);
+
+      const resetTokenAction = {
+        type: AuthActions.AuthTypes.SET_TOKEN,
+        payload: null
+      };
+
+      if (!userData) { return [resetTokenAction]; }
 
       if (userData._token) {
-        const expirationDuration =
-          new Date(userData._tokenExpirationDate).getTime() -
-          new Date().getTime();
         return [
           {
-            type: AuthActions.AuthTypes.AUTO_LOGOUT,
-            payload: expirationDuration,
+            type: AuthActions.AuthTypes.SET_TOKEN,
+            payload: userData._token
+          },
+          {
+            type: AuthActions.AuthTypes.SET_TOKEN_EXPIRATION_DATE,
+            payload: new Date(userData._tokenExpirationDate)
           },
           {
             type: AuthActions.AuthTypes.SIGNIN
           },
           {
-            type: AuthActions.AuthTypes.SET_TOKEN,
-            payload: userData._token
-          }
+            type: AuthActions.AuthTypes.AUTO_LOGOUT,
+          },
         ];
       }
+      return [resetTokenAction];
     })
   );
 
   @Effect()
   public authAutoLogout = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.AUTO_LOGOUT),
-    tap()
+    withLatestFrom(this.store$),
+    switchMap(([action, storeState]) => {
+      console.log('Auth Effects, store:', storeState);
+      // TODO const expirationDuration =
+      // TODO new Date(storeState.auth.tokenExpirationDate).getTime() -
+      // TODO new Date().getTime();
+
+      // TODO Check Expiration Date validity
+      if (action) {
+        // TODO timer(expirationDuration)
+        // return from(null).pipe(delay(500));
+        return timer(5000);
+      } else {
+        return from(null);
+      }
+    }),
+    mergeMap((actions) => {
+      return [{
+        type: AuthActions.AuthTypes.LOGOUT,
+      }];
+    }),
+    tap(action => {
+      localStorage.removeItem('userData');
+      // TODO check if I should navigate to sign in
+      this.router.navigate(['/signin']);
+    })
   );
 
   constructor(
