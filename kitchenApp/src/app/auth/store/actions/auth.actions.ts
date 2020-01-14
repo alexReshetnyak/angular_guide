@@ -9,7 +9,6 @@ export enum AuthTypes {
   SET_TOKEN                 = 'SET_TOKEN',
   SET_TOKEN_EXPIRATION_DATE = 'SET_TOKEN_EXPIRATION_DATE',
   AUTO_LOGIN                = 'AUTO_LOGIN',
-  AUTO_LOGOUT               = 'AUTO_LOGOUT',
 }
 
 export class TrySignup implements Action {
@@ -52,10 +51,6 @@ export class AutoLogin implements Action {
   readonly type = AuthTypes.AUTO_LOGIN;
 }
 
-export class AutoLogout implements Action {
-  readonly type = AuthTypes.AUTO_LOGOUT;
-}
-
 export type AuthActions =
   TrySignup               |
   TrySignin               |
@@ -64,5 +59,4 @@ export type AuthActions =
   Logout                  |
   SetToken                |
   SetTokenExpirationDate  |
-  AutoLogin               |
-  AutoLogout;
+  AutoLogin               ;
