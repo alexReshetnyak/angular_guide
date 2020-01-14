@@ -4,10 +4,9 @@ import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject, Observable } from 'rxjs';
 
-import { FIREBASE_API_KEY } from 'src/app/secret';
+import { FIREBASE_API_KEY, FIREBASE_URL } from 'src/app/secret';
 import { User } from '../models/user.model';
 
-const FIREBASE_URL = 'https://identitytoolkit.googleapis.com/v1';
 
 export interface AuthResponseData {
   kind: string;
@@ -19,13 +18,17 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
-@Injectable({ providedIn: 'root' })
+// @Injectable({ providedIn: 'root' })
+@Injectable()
 export class AuthService {
   public user = new BehaviorSubject<User>(null);
 
   private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   public signup(email: string, password: string): Observable<AuthResponseData> {
     return this.http

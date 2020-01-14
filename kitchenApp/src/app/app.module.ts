@@ -22,7 +22,15 @@ import { reducers }     from './store/app.reducers';
     HttpClientModule,
     AuthModule,
     CoreModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(
+      reducers,
+      {
+        runtimeChecks: {
+          strictStateImmutability: true,
+          strictActionImmutability: true
+        }
+      }
+    ),
     EffectsModule.forRoot([AuthEffects]),
     // StoreRouterConnectingModule,
   ],

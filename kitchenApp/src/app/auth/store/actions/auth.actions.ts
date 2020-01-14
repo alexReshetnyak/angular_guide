@@ -1,5 +1,10 @@
 import { Action } from '@ngrx/store';
 
+interface User {
+  username: string,
+  password: string,
+}
+
 export enum AuthTypes {
   TRY_SIGNUP                = 'TRY_SIGNUP',
   SIGNUP                    = 'SIGNUP',
@@ -14,13 +19,13 @@ export enum AuthTypes {
 export class TrySignup implements Action {
   readonly type = AuthTypes.TRY_SIGNUP;
 
-  constructor(public payload: {username: string, password: string}) {}
+  constructor(public payload: User) {}
 }
 
 export class TrySignin implements Action {
   readonly type = AuthTypes.TRY_SIGNIN;
 
-  constructor(public payload: {username: string, password: string}) {}
+  constructor(public payload: User) {}
 }
 
 export class Signup implements Action {

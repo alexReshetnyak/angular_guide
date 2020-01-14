@@ -23,7 +23,6 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         ...state,
         token: null,
         authenticated: false,
-        tokenExpirationDate: null,
       };
     case (AuthActions.AuthTypes.SET_TOKEN):
       return {
