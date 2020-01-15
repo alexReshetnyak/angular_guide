@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { map, tap, switchMap, mergeMap, withLatestFrom, } from 'rxjs/operators';
-import { from, } from 'rxjs';
+import { map, tap, switchMap, mergeMap, withLatestFrom, catchError, } from 'rxjs/operators';
+import { from, of, } from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import * as AuthActions from '../actions/auth.actions';
@@ -49,7 +49,7 @@ export class AuthEffects {
     switchMap((authData: User) => {
       return from(
         firebase.auth().signInWithEmailAndPassword(authData.username, authData.password)
-      );
+      )
     }),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     mergeMap((token: string) => {
@@ -66,18 +66,31 @@ export class AuthEffects {
     }),
     tap(action => {
       action.payload && this.router.navigate(['/']);
+    }),
+    catchError(err => {
+      console.log('Firebase sign in error:', err);
+      return of();
     })
   );
 
-  @Effect({ dispatch: false })
-  public authLogout = this.actions$.pipe(
-    ofType(AuthActions.AuthTypes.LOGOUT),
+  // @Effect({ dispatch: false })
+  // public authLogout = this.actions$.pipe(
+  //   ofType(AuthActions.AuthTypes.LOGOUT),
+  //   tap(() => {
+  //     localStorage.removeItem('userData');
+  //     this.router.navigate(['/']);
+  //   })
+  // );
+
+  @Effect()
+  public tryLogout = this.actions$.pipe(
+    ofType(AuthActions.AuthTypes.TRY_LOGOUT),
+    mergeMap(() => [{ type: AuthActions.AuthTypes.LOGOUT }]),
     tap(() => {
       localStorage.removeItem('userData');
-      this.router.navigate(['/']);
+      this.router.navigate(['/signin']);
     })
   );
-
 
   @Effect()
   public authAutoLogin = this.actions$.pipe(

@@ -14,7 +14,6 @@ import * as AuthActions from '../store/actions/auth.actions';
 export class SigninComponent {
   constructor(
     private store: Store<fromApp.AppState>,
-    private router: Router,
   ) {}
 
   public onSignin(form: NgForm): void {

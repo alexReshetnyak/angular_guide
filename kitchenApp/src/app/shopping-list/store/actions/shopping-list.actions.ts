@@ -3,12 +3,12 @@ import { Action } from '@ngrx/store';
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 
 export enum ShoppingListTypes {
-  ADD_INGREDIENT     = 'ADD_INGREDIENT',
-  ADD_INGREDIENTS    = 'ADD_INGREDIENTS',
-  UPDATE_INGREDIENT  = 'UPDATE_INGREDIENT',
-  DELETE_INGREDIENT  = 'DELETE_INGREDIENT',
-  START_EDIT         = 'START_EDIT',
-  STOP_EDIT          = 'STOP_EDIT',
+  ADD_INGREDIENT     = '[Shopping List] Add Ingredient',
+  ADD_INGREDIENTS    = '[Shopping List] Add Ingredients',
+  UPDATE_INGREDIENT  = '[Shopping List] Update Ingredient',
+  DELETE_INGREDIENT  = '[Shopping List] Delete Ingredient',
+  START_EDIT         = '[Shopping List] Start edit',
+  STOP_EDIT          = '[Shopping List] Stop edit',
 }
 
 export class AddIngredient implements Action {

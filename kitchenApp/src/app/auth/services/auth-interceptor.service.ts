@@ -11,7 +11,7 @@ import { take, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import * as fromApp from '../../store/app.reducers';
-import * as fromAuth from '../../auth/store/reducers/auth.reducers';
+import * as fromAuth from '../store/reducers/auth.reducers';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -21,6 +21,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return this.store.select('auth').pipe(
       take(1),
       switchMap((authState: fromAuth.State) => {
+        console.log('Auth Interceptor, authState:', authState);
         const copiedReq = req.clone({ params: req.params.set('auth', authState.token) });
         return next.handle(copiedReq);
       })

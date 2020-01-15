@@ -3,12 +3,12 @@ import { Recipe } from '../../models/recipe.model';
 
 
 export enum RecipeTypes {
-  SET_RECIPES   = 'SET_RECIPES',
-  ADD_RECIPE    = 'ADD_RECIPE',
-  UPDATE_RECIPE = 'UPDATE_RECIPE',
-  DELETE_RECIPE = 'DELETE_RECIPE',
-  STORE_RECIPES = 'STORE_RECIPES',
-  FETCH_RECIPES = 'FETCH_RECIPES',
+  SET_RECIPES   = '[Recipe] Set Recipes',
+  ADD_RECIPE    = '[Recipe] Add Recipe',
+  UPDATE_RECIPE = '[Recipe] Update Recipe',
+  DELETE_RECIPE = '[Recipe] Delete Recipe',
+  STORE_RECIPES = '[Recipe] Store Recipes',
+  FETCH_RECIPES = '[Recipe] Fetch Recipes',
 }
 
 export class SetRecipes implements Action {
