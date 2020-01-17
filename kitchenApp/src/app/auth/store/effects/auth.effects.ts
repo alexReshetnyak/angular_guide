@@ -53,6 +53,8 @@ export class AuthEffects {
     }),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     mergeMap((token: string) => {
+      console.log('Auth Effects, Current User', firebase.auth().currentUser);
+
       localStorage.setItem('userData', JSON.stringify({ _token: token }));
       return [
         {
@@ -73,7 +75,7 @@ export class AuthEffects {
     })
   );
 
-  // @Effect({ dispatch: false })
+  // @Effect({ dispatch: false }) // * effect which is does not dispatch an action
   // public authLogout = this.actions$.pipe(
   //   ofType(AuthActions.AuthTypes.LOGOUT),
   //   tap(() => {
@@ -109,10 +111,11 @@ export class AuthEffects {
             type: AuthActions.AuthTypes.SIGNIN
           },
         ] :
-        [{
-          type: AuthActions.AuthTypes.SET_TOKEN,
-          payload: null
-        }];
+        [{ type: 'DUMMY' }];
+        // [{
+        //   type: AuthActions.AuthTypes.SET_TOKEN,
+        //   payload: null
+        // }];
     })
   );
 

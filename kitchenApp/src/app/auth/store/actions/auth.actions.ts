@@ -6,14 +6,14 @@ interface User {
 }
 
 export enum AuthTypes {
-  TRY_SIGNUP                = '[auth] Try Signup',
-  TRY_SIGNIN                = '[auth] Try Signin',
-  TRY_LOGOUT                = '[auth] Try Logout',
-  LOGOUT                    = '[auth] Logout',
-  SIGNUP                    = '[auth] Signup',
-  SIGNIN                    = '[auth] Signin',
-  SET_TOKEN                 = '[auth] Set Token',
-  AUTO_LOGIN                = '[auth] Auto Login',
+  TRY_SIGNUP = '[auth] Try Signup',
+  TRY_SIGNIN = '[auth] Try Signin',
+  TRY_LOGOUT = '[auth] Try Logout',
+  LOGOUT     = '[auth] Logout',
+  SIGNUP     = '[auth] Signup',
+  SIGNIN     = '[auth] Signin',
+  SET_TOKEN  = '[auth] Set Token',
+  AUTO_LOGIN = '[auth] Auto Login',
 }
 
 export class TrySignup implements Action {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 
 import * as fromApp from '../../store/app.reducers';
 import * as AuthActions from '../store/actions/auth.actions';
