@@ -15,6 +15,22 @@ interface User {
   password: string;
 }
 
+interface StorageUser {
+  _token: string;
+  _tokenExpirationDate: string;
+}
+
+// TODO move this to auth service
+const createDataForStorage = (token: string): string => {
+  const expirationDate = new Date(new Date().getTime() + 60 * 59 * 1000);
+  const userAuthData = {
+    _token: token,
+    _tokenExpirationDate: expirationDate
+  };
+  return JSON.stringify(userAuthData);
+};
+
+
 @Injectable()
 export class AuthEffects {
   @Effect()
@@ -26,7 +42,7 @@ export class AuthEffects {
     )),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     mergeMap((token: string) => {
-      localStorage.setItem('userData', JSON.stringify({ _token: token }));
+      localStorage.setItem('userData', createDataForStorage(token));
       return [
         {
           type: AuthActions.AuthTypes.SIGNUP
@@ -34,8 +50,12 @@ export class AuthEffects {
         {
           type: AuthActions.AuthTypes.SET_TOKEN,
           payload: token
-        }
-      ]
+        },
+        // {
+        //   type: AuthActions.AuthTypes.AUTO_LOGOUT,
+        //   payload: expirationDuration
+        // },
+      ];
     }),
     tap(action => {
       action.payload && this.router.navigate(['/']);
@@ -49,13 +69,11 @@ export class AuthEffects {
     switchMap((authData: User) => {
       return from(
         firebase.auth().signInWithEmailAndPassword(authData.username, authData.password)
-      )
+      );
     }),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     mergeMap((token: string) => {
-      console.log('Auth Effects, Current User', firebase.auth().currentUser);
-
-      localStorage.setItem('userData', JSON.stringify({ _token: token }));
+      localStorage.setItem('userData', createDataForStorage(token));
       return [
         {
           type: AuthActions.AuthTypes.SIGNIN
@@ -63,7 +81,11 @@ export class AuthEffects {
         {
           type: AuthActions.AuthTypes.SET_TOKEN,
           payload: token
-        }
+        },
+        // {
+        //   type: AuthActions.AuthTypes.AUTO_LOGOUT,
+        //   payload: expirationDuration
+        // },
       ];
     }),
     tap(action => {
@@ -98,9 +120,12 @@ export class AuthEffects {
   public authAutoLogin = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.AUTO_LOGIN),
     withLatestFrom(this.store$),
-    map(([action, storeState]) => JSON.parse(localStorage.getItem('userData')) as { _token: string}),
-    mergeMap((userData: {_token: string}) => {
+    map(([action, storeState]) => JSON.parse(localStorage.getItem('userData')) as StorageUser),
+    mergeMap((userData: StorageUser) => {
+      // TODO create function to validate token and expiration time
       const token = userData ? userData._token : null;
+      const expirationDate = userData ? userData._tokenExpirationDate : null;
+      const expirationDuration = new Date(expirationDate).getTime() - new Date().getTime();
       return token ?
         [
           {
@@ -110,11 +135,14 @@ export class AuthEffects {
           {
             type: AuthActions.AuthTypes.SIGNIN
           },
+          // {
+          //   type: AuthActions.AuthTypes.AUTO_LOGOUT,
+          //   payload: expirationDuration
+          // },
         ] :
         [{ type: 'DUMMY' }];
         // [{
-        //   type: AuthActions.AuthTypes.SET_TOKEN,
-        //   payload: null
+        //   type: AuthActions.AuthTypes.TRY_LOGOUT,
         // }];
     })
   );

@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
 
 interface User {
-  username: string,
-  password: string,
+  username: string;
+  password: string;
 }
 
 export enum AuthTypes {

@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Recipe } from '../models/recipe.model';
-import { Ingredient } from '../../shared/models/ingredient.model'
+import { Ingredient } from '../../shared/models/ingredient.model';
 import { CoreModule } from 'src/app/core/core.module';
 
 import * as shoppingListActions from '../../shopping-list/store/actions/shopping-list.actions';
