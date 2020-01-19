@@ -6,14 +6,16 @@ interface User {
 }
 
 export enum AuthTypes {
-  TRY_SIGNUP = '[auth] Try Signup',
-  TRY_SIGNIN = '[auth] Try Signin',
-  TRY_LOGOUT = '[auth] Try Logout',
-  LOGOUT     = '[auth] Logout',
-  SIGNUP     = '[auth] Signup',
-  SIGNIN     = '[auth] Signin',
-  SET_TOKEN  = '[auth] Set Token',
-  AUTO_LOGIN = '[auth] Auto Login',
+  TRY_SIGNUP                = '[auth] Try Signup',
+  TRY_SIGNIN                = '[auth] Try Signin',
+  TRY_LOGOUT                = '[auth] Try Logout',
+  LOGOUT                    = '[auth] Logout',
+  SIGNUP                    = '[auth] Signup',
+  SIGNIN                    = '[auth] Signin',
+  SET_TOKEN                 = '[auth] Set Token',
+  SET_TOKEN_EXPIRATION_DATE = '[auth] Set Token Expiration Date',
+  AUTO_LOGIN                = '[auth] Auto Login',
+  AUTO_LOGOUT               = '[auth] Auto Logout',
 }
 
 export class TrySignup implements Action {
@@ -50,8 +52,20 @@ export class SetToken implements Action {
   constructor(public payload: string) {}
 }
 
+export class SetTokenExpirationDate implements Action {
+  readonly type = AuthTypes.SET_TOKEN_EXPIRATION_DATE;
+
+  constructor(public payload: string) {}
+}
+
 export class AutoLogin implements Action {
   readonly type = AuthTypes.AUTO_LOGIN;
+}
+
+export class AutoLogout implements Action {
+  readonly type = AuthTypes.AUTO_LOGOUT;
+
+  constructor(public payload: { expiresIn: number, expirationDate: string }) {}
 }
 
 export type AuthActions =
@@ -62,4 +76,6 @@ export type AuthActions =
   Signin                  |
   Logout                  |
   SetToken                |
-  AutoLogin               ;
+  SetTokenExpirationDate  |
+  AutoLogin               |
+  AutoLogout              ;

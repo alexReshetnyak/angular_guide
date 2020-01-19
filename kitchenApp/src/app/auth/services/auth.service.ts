@@ -18,8 +18,8 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
-// @Injectable({ providedIn: 'root' })
-@Injectable()
+@Injectable({ providedIn: 'root' })
+// @Injectable()
 export class AuthService {
   public user = new BehaviorSubject<User>(null);
 

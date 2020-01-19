@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { map, tap, switchMap, mergeMap, withLatestFrom, catchError, } from 'rxjs/operators';
-import { from, of, } from 'rxjs';
+import { map, tap, switchMap, mergeMap, withLatestFrom, catchError, delay, } from 'rxjs/operators';
+import { from, of, timer, } from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import * as AuthActions from '../actions/auth.actions';
@@ -19,6 +19,16 @@ interface StorageUser {
   _token: string;
   _tokenExpirationDate: string;
 }
+
+// TODO move this to auth service
+const getUserExpirationTime = (user: StorageUser): number => {
+  let expiresIn = 0;
+  if (user && user._token && user._tokenExpirationDate) {
+    const { _tokenExpirationDate: expirationDate } = user;
+    expiresIn =  new Date(expirationDate).getTime() - new Date().getTime();
+  }
+  return expiresIn;
+};
 
 // TODO move this to auth service
 const createDataForStorage = (token: string): string => {
@@ -122,29 +132,42 @@ export class AuthEffects {
     withLatestFrom(this.store$),
     map(([action, storeState]) => JSON.parse(localStorage.getItem('userData')) as StorageUser),
     mergeMap((userData: StorageUser) => {
-      // TODO create function to validate token and expiration time
-      const token = userData ? userData._token : null;
-      const expirationDate = userData ? userData._tokenExpirationDate : null;
-      const expirationDuration = new Date(expirationDate).getTime() - new Date().getTime();
-      return token ?
+      const expiresIn = getUserExpirationTime(userData);
+      console.log('Token expires in ms:', expiresIn);
+      return expiresIn ?
         [
           {
             type: AuthActions.AuthTypes.SET_TOKEN,
-            payload: token
+            payload: userData._token
           },
           {
             type: AuthActions.AuthTypes.SIGNIN
           },
-          // {
-          //   type: AuthActions.AuthTypes.AUTO_LOGOUT,
-          //   payload: expirationDuration
-          // },
+          {
+            type: AuthActions.AuthTypes.AUTO_LOGOUT,
+            payload: { expiresIn, expirationDate: userData._tokenExpirationDate }
+          },
+          {
+            type: AuthActions.AuthTypes.SET_TOKEN_EXPIRATION_DATE,
+            payload: userData._tokenExpirationDate
+          },
         ] :
         [{ type: 'DUMMY' }];
-        // [{
-        //   type: AuthActions.AuthTypes.TRY_LOGOUT,
-        // }];
     })
+  );
+
+  @Effect()
+  public authAutoLogout = this.actions$.pipe(
+    ofType(AuthActions.AuthTypes.AUTO_LOGOUT),
+    map((action: AuthActions.AutoLogout) => action.payload),
+    switchMap(({expiresIn, expirationDate}) => of(expirationDate).pipe(delay(expiresIn))),
+    mergeMap((expirationDate: string) => {
+      // TODO compare current state expiration time with timer expiration time
+      // TODO  expirationDate === store.tokenExpirationDate ?
+      return [{
+        type: AuthActions.AuthTypes.TRY_LOGOUT
+      }];
+    }),
   );
 
   constructor(
