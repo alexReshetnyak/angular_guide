@@ -18,6 +18,11 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
+export interface StorageUser {
+  _token: string;
+  _tokenExpirationDate: string;
+}
+
 @Injectable({ providedIn: 'root' })
 // @Injectable()
 export class AuthService {
@@ -128,6 +133,15 @@ export class AuthService {
     this.user.next(user);
     this.autoLogout(expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));
+  }
+
+  public getUserExpirationTime(user: StorageUser): number {
+    let expiresIn = 0;
+    if (user && user._token && user._tokenExpirationDate) {
+      const { _tokenExpirationDate: expirationDate } = user;
+      expiresIn =  new Date(expirationDate).getTime() - new Date().getTime();
+    }
+    return expiresIn;
   }
 
   private handleError(errorRes: HttpErrorResponse): Observable<never> {

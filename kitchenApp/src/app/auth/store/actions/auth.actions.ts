@@ -16,6 +16,8 @@ export enum AuthTypes {
   SET_TOKEN_EXPIRATION_DATE = '[auth] Set Token Expiration Date',
   AUTO_LOGIN                = '[auth] Auto Login',
   AUTO_LOGOUT               = '[auth] Auto Logout',
+  NAVIGATE_AFTER_LOGIN      = '[auth] Navigate after login',
+  NAVIGATE_AFTER_LOGOUT     = '[auth] Navigate after logout',
 }
 
 export class TrySignup implements Action {
@@ -68,6 +70,15 @@ export class AutoLogout implements Action {
   constructor(public payload: { expiresIn: number, expirationDate: string }) {}
 }
 
+export class NavigateAfterLogin implements Action {
+  readonly type = AuthTypes.NAVIGATE_AFTER_LOGIN;
+}
+
+export class NavigateAfterLogout implements Action {
+  readonly type = AuthTypes.NAVIGATE_AFTER_LOGOUT;
+}
+
+
 export type AuthActions =
   TrySignup               |
   TrySignin               |
@@ -78,4 +89,6 @@ export type AuthActions =
   SetToken                |
   SetTokenExpirationDate  |
   AutoLogin               |
-  AutoLogout              ;
+  AutoLogout              |
+  NavigateAfterLogin      |
+  NavigateAfterLogout     ;
