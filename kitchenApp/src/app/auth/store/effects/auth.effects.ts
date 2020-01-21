@@ -12,6 +12,9 @@ import * as AuthActions from '../actions/auth.actions';
 import * as fromApp from '../../../store/app.reducers';
 
 
+// TODO Create async error interceptor somewhere in core service to catch an error and run spinner
+// TODO this.coreService.handleAsyncAction({ module: 'auth', action: from(firebase.auth().currentUser.getIdToken()) })
+
 interface User {
   username: string;
   password: string;
@@ -37,44 +40,13 @@ export class AuthEffects {
       from(firebase.auth().createUserWithEmailAndPassword(authData.username, authData.password))
     )),
     switchMap(() => from(firebase.auth().currentUser.getIdToken())),
-    mergeMap((token: string) => {
-      localStorage.setItem('userData', createDataForStorage(token));
-      return [
-        {
-          type: AuthActions.AuthTypes.SIGNUP
-        },
-        {
-          type: AuthActions.AuthTypes.SET_TOKEN,
-          payload: token
-        },
-        // {
-        //   type: AuthActions.AuthTypes.AUTO_LOGOUT,
-        //   payload: expirationDuration
-        // },
-      ];
-    }),
-    tap(action => {
-      action.payload && this.router.navigate(['/']);
-    })
-  );
-
-  @Effect()
-  public authSignin = this.actions$.pipe(
-    ofType(AuthActions.AuthTypes.TRY_SIGNIN),
-    map((action: AuthActions.TrySignup) => action.payload),
-    switchMap((authData: User) => from(
-      firebase.auth().signInWithEmailAndPassword(authData.username, authData.password)
-    )),
-    switchMap(() => from(firebase.auth().currentUser.getIdToken())),
     map((token: string) => {
       const storageUser: string = createDataForStorage(token);
       localStorage.setItem('userData', storageUser);
       return JSON.parse(storageUser) as StorageUser;
     }),
     mergeMap((storageUser: StorageUser) => {
-      // TODO Resolve sign in issue (expiresIn always equal 0)
-      // TODO remove ? statement
-      const expiresIn = this.authService.getUserExpirationTime(storageUser) ? 10000 : 0;
+      const expiresIn = this.authService.getUserExpirationTime(storageUser);
       return expiresIn ?
         [
           {
@@ -96,10 +68,49 @@ export class AuthEffects {
         ] :
         [{ type: 'DUMMY' }];
     }),
-    tap(action => { console.log('Tap after sign in, action:', action); }),
-    catchError(err => {
+  );
+
+  @Effect()
+  public authSignin = this.actions$.pipe(
+    ofType(AuthActions.AuthTypes.TRY_SIGNIN),
+    map((action: AuthActions.TrySignup) => action.payload),
+    switchMap((authData: User) => from(
+      firebase.auth().signInWithEmailAndPassword(authData.username, authData.password)
+    )),
+    switchMap(() => from(firebase.auth().currentUser.getIdToken())),
+    map((token: string) => {
+      const storageUser: string = createDataForStorage(token);
+      localStorage.setItem('userData', storageUser);
+      return JSON.parse(storageUser) as StorageUser;
+    }),
+    mergeMap((storageUser: StorageUser) => {
+      const expiresIn = this.authService.getUserExpirationTime(storageUser);
+      return expiresIn ?
+        [
+          {
+            type: AuthActions.AuthTypes.SET_TOKEN,
+            payload: storageUser._token
+          },
+          {
+            type: AuthActions.AuthTypes.SET_TOKEN_EXPIRATION_DATE,
+            payload: storageUser._tokenExpirationDate
+          },
+          {
+            type: AuthActions.AuthTypes.SIGNIN
+          },
+          {
+            type: AuthActions.AuthTypes.AUTO_LOGOUT,
+            payload: { expiresIn, expirationDate: storageUser._tokenExpirationDate }
+          },
+          { type: AuthActions.AuthTypes.NAVIGATE_AFTER_LOGIN },
+        ] :
+        [{ type: 'DUMMY' }];
+    }),
+    // tap(action => { console.log('Tap after sign in, action:', action); }),
+    catchError((err, caught) => {
       console.log('Firebase sign in error:', err);
-      return of();
+      // * this.store.dispatch(new CoreActions.SetNewError(err));
+      return caught;
     })
   );
 
@@ -107,8 +118,9 @@ export class AuthEffects {
   public authNavigateAfterLogin = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.NAVIGATE_AFTER_LOGIN),
     tap(() => {
-      console.log('Navigate after login', this.router.url);
-      this.router.url === '/signin' && this.router.navigate(['/']);
+      console.log('Navigate after login/sign up:', this.router.url);
+      // (this.router.url === '/signin' || this.router.url === '/signup') && this.router.navigate(['/']);
+      this.router.navigate(['/']);
     })
   );
 
@@ -144,8 +156,10 @@ export class AuthEffects {
     map(([action, storeState]) => JSON.parse(localStorage.getItem('userData')) as StorageUser),
     mergeMap((userData: StorageUser) => {
       // TODO remove ? statement
-      const expiresIn = this.authService.getUserExpirationTime(userData) ? 10000 : 0;
+      const expiresIn = this.authService.getUserExpirationTime(userData);
       console.log('Token expires in ms:', expiresIn, userData);
+      // TODO check current rout and if it is signin/signup add action:
+      // TODO  { type: AuthActions.AuthTypes.NAVIGATE_AFTER_LOGIN },
       return expiresIn ?
         [
           {
