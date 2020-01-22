@@ -3,12 +3,12 @@ import { Recipe } from '../../models/recipe.model';
 
 
 export enum RecipeTypes {
-  SET_RECIPES   = '[Recipe] Set Recipes',
-  ADD_RECIPE    = '[Recipe] Add Recipe',
-  UPDATE_RECIPE = '[Recipe] Update Recipe',
-  DELETE_RECIPE = '[Recipe] Delete Recipe',
-  STORE_RECIPES = '[Recipe] Store Recipes',
-  FETCH_RECIPES = '[Recipe] Fetch Recipes',
+  SET_RECIPES   = '[Recipes] Set Recipes',
+  ADD_RECIPE    = '[Recipes] Add Recipe',
+  UPDATE_RECIPE = '[Recipes] Update Recipe',
+  DELETE_RECIPE = '[Recipes] Delete Recipe',
+  STORE_RECIPES = '[Recipes] Store Recipes',
+  FETCH_RECIPES = '[Recipes] Fetch Recipes',
 }
 
 export class SetRecipes implements Action {
@@ -43,9 +43,10 @@ export class FetchRecipes implements Action {
   readonly type = RecipeTypes.FETCH_RECIPES;
 }
 
-export type RecipeActions = SetRecipes |
-  AddRecipe |
+export type RecipeActions =
+  SetRecipes   |
+  AddRecipe    |
   UpdateRecipe |
   DeleteRecipe |
   StoreRecipes |
-  FetchRecipes;
+  FetchRecipes ;

@@ -47,7 +47,7 @@ export class AuthEffects {
     }),
     mergeMap((storageUser: StorageUser) => {
       const expiresIn = this.authService.getUserExpirationTime(storageUser);
-      return expiresIn ?
+      return expiresIn && expiresIn > 0 ?
         [
           {
             type: AuthActions.AuthTypes.SET_TOKEN,
@@ -85,7 +85,7 @@ export class AuthEffects {
     }),
     mergeMap((storageUser: StorageUser) => {
       const expiresIn = this.authService.getUserExpirationTime(storageUser);
-      return expiresIn ?
+      return expiresIn && expiresIn > 0 ?
         [
           {
             type: AuthActions.AuthTypes.SET_TOKEN,
@@ -158,9 +158,7 @@ export class AuthEffects {
       // TODO remove ? statement
       const expiresIn = this.authService.getUserExpirationTime(userData);
       console.log('Token expires in ms:', expiresIn, userData);
-      // TODO check current rout and if it is signin/signup add action:
-      // TODO  { type: AuthActions.AuthTypes.NAVIGATE_AFTER_LOGIN },
-      return expiresIn ?
+      return expiresIn && expiresIn > 0 ?
         [
           {
             type: AuthActions.AuthTypes.SET_TOKEN,

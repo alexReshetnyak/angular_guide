@@ -30,7 +30,7 @@ import { RecipeEffects } from './store/effects/recipe.effects';
     RecipesRoutingModule,
     SharedModule,
     StoreModule.forFeature('recipes', recipeReducer),
-    EffectsModule.forFeature([RecipeEffects])
+    // EffectsModule.forFeature([RecipeEffects])
   ]
 })
 export class RecipesModule {}

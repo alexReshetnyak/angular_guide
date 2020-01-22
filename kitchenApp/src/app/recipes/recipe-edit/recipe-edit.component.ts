@@ -8,6 +8,7 @@ import { Ingredient } from 'src/app/shared/models/ingredient.model';
 
 import * as RecipeActions from '../store/actions/recipe.actions';
 import * as fromRecipe    from '../store/reducers/recipe.reducers';
+import * as fromApp from '../../store/app.reducers';
 
 interface RecipeFormValue {
   name: string;
@@ -30,7 +31,7 @@ export class RecipeEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<fromRecipe.FeatureState>
+    private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit() {
@@ -101,30 +102,30 @@ export class RecipeEditComponent implements OnInit {
 
   private initEditForm(): void {
     this.store.select('recipes')
-    .pipe(take(1))
-    .subscribe((recipeState: fromRecipe.State) => {
-      const recipe = recipeState.recipes[this.id];
-      const ingredients = new FormArray([]);
+      .pipe(take(1))
+      .subscribe((recipeState: fromRecipe.State) => {
+        const recipe = recipeState.recipes[this.id];
+        const ingredients = new FormArray([]);
 
-      recipe.ingredients && recipe.ingredients.forEach((ingredient: Ingredient) => {
-        ingredients.push(
-          new FormGroup({
-            name: new FormControl(ingredient.name, Validators.required),
-            amount: new FormControl(ingredient.amount, [
-              Validators.required,
-              Validators.pattern(/^[1-9]+[0-9]*$/)
-            ])
-          })
-        );
-      });
+        recipe.ingredients && recipe.ingredients.forEach((ingredient: Ingredient) => {
+          ingredients.push(
+            new FormGroup({
+              name: new FormControl(ingredient.name, Validators.required),
+              amount: new FormControl(ingredient.amount, [
+                Validators.required,
+                Validators.pattern(/^[1-9]+[0-9]*$/)
+              ])
+            })
+          );
+        });
 
-      this.buildForm({
-        name:         recipe.name,
-        imagePath:    recipe.imagePath,
-        description:  recipe.description,
-        ingredients
+        this.buildForm({
+          name:         recipe.name,
+          imagePath:    recipe.imagePath,
+          description:  recipe.description,
+          ingredients
+        });
       });
-    });
   }
 
   private buildForm(recipe: RecipeFormValue): void {

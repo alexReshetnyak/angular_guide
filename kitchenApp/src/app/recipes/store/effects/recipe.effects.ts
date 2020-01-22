@@ -14,7 +14,7 @@ import * as fromRecipe    from '../reducers/recipe.reducers';
 @Injectable()
 export class RecipeEffects {
   @Effect()
-  public recipeFetch = this.actions$.pipe(
+  public fetchRecipes = this.actions$.pipe(
     ofType(RecipeActions.RecipeTypes.FETCH_RECIPES),
     switchMap((action: RecipeActions.FetchRecipes) => (
       this.httpClient.get<Recipe[]>(`${FIREBASE_URL}/recipes.json`, {
@@ -22,20 +22,17 @@ export class RecipeEffects {
         responseType: 'json'
       })
     )),
-    map((recipes) => {
+    map((recipes: Recipe[]) => {
       console.log(recipes);
       for (const recipe of recipes) {
         if (!recipe.ingredients) { recipe.ingredients = []; }
       }
-      return {
-        type: RecipeActions.RecipeTypes.SET_RECIPES,
-        payload: recipes
-      };
+      return new RecipeActions.SetRecipes(recipes);
     })
   );
 
   @Effect({dispatch: false})
-  public recipeStore = this.actions$.pipe(
+  public storeRecipes = this.actions$.pipe(
     ofType(RecipeActions.RecipeTypes.STORE_RECIPES),
     withLatestFrom(this.store.select('recipes')),
     switchMap(([action, state]) => {
