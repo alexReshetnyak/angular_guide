@@ -23,7 +23,6 @@ export class RecipeEffects {
       })
     )),
     map((recipes: Recipe[]) => {
-      console.log(recipes);
       for (const recipe of recipes) {
         if (!recipe.ingredients) { recipe.ingredients = []; }
       }
@@ -31,7 +30,7 @@ export class RecipeEffects {
     })
   );
 
-  @Effect({dispatch: false})
+  @Effect({ dispatch: false })
   public storeRecipes = this.actions$.pipe(
     ofType(RecipeActions.RecipeTypes.STORE_RECIPES),
     withLatestFrom(this.store.select('recipes')),

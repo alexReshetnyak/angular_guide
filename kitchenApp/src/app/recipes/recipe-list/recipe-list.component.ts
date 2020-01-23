@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Recipe } from '../models/recipe.model';
 
 import * as fromApp from '../../store/app.reducers';
+import * as RecipeActions from '../store/actions/recipe.actions';
 
 @Component({
   selector: 'app-recipe-list',
@@ -13,8 +14,9 @@ import * as fromApp from '../../store/app.reducers';
   styleUrls: ['./recipe-list.component.scss'],
 })
 export class RecipeListComponent implements OnInit {
-  // public recipeState: Observable<State<Recipe[]>>;
   public recipes: Recipe[];
+
+  private firstLoad = true;
 
   constructor(
     private router: Router,
@@ -25,7 +27,13 @@ export class RecipeListComponent implements OnInit {
   ngOnInit() {
     this.store.select('recipes').pipe(
       map(recipeState => recipeState.recipes),
-    ).subscribe((recipes: Recipe[]) => this.recipes = recipes );
+      ).subscribe((recipes: Recipe[]) => {
+      this.recipes = recipes;
+      if ((!recipes || !recipes.length) && this.firstLoad) {
+        this.store.dispatch(new RecipeActions.FetchRecipes());
+      }
+      this.firstLoad = false;
+    });
   }
 
   public onNewRecipe(): void {

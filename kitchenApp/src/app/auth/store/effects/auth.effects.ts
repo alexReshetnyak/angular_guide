@@ -49,22 +49,11 @@ export class AuthEffects {
       const expiresIn = this.authService.getUserExpirationTime(storageUser);
       return expiresIn && expiresIn > 0 ?
         [
-          {
-            type: AuthActions.AuthTypes.SET_TOKEN,
-            payload: storageUser._token
-          },
-          {
-            type: AuthActions.AuthTypes.SET_TOKEN_EXPIRATION_DATE,
-            payload: storageUser._tokenExpirationDate
-          },
-          {
-            type: AuthActions.AuthTypes.SIGNIN
-          },
-          {
-            type: AuthActions.AuthTypes.AUTO_LOGOUT,
-            payload: { expiresIn, expirationDate: storageUser._tokenExpirationDate }
-          },
-          { type: AuthActions.AuthTypes.NAVIGATE_AFTER_LOGIN },
+          new AuthActions.SetToken(storageUser._token),
+          new AuthActions.SetTokenExpirationDate(storageUser._tokenExpirationDate),
+          new AuthActions.Signin(),
+          new AuthActions.AutoLogout({ expiresIn, expirationDate: storageUser._tokenExpirationDate }),
+          new AuthActions.NavigateAfterLogin(),
         ] :
         [{ type: 'DUMMY' }];
     }),
@@ -87,22 +76,11 @@ export class AuthEffects {
       const expiresIn = this.authService.getUserExpirationTime(storageUser);
       return expiresIn && expiresIn > 0 ?
         [
-          {
-            type: AuthActions.AuthTypes.SET_TOKEN,
-            payload: storageUser._token
-          },
-          {
-            type: AuthActions.AuthTypes.SET_TOKEN_EXPIRATION_DATE,
-            payload: storageUser._tokenExpirationDate
-          },
-          {
-            type: AuthActions.AuthTypes.SIGNIN
-          },
-          {
-            type: AuthActions.AuthTypes.AUTO_LOGOUT,
-            payload: { expiresIn, expirationDate: storageUser._tokenExpirationDate }
-          },
-          { type: AuthActions.AuthTypes.NAVIGATE_AFTER_LOGIN },
+          new AuthActions.SetToken(storageUser._token),
+          new AuthActions.SetTokenExpirationDate(storageUser._tokenExpirationDate),
+          new AuthActions.Signin(),
+          new AuthActions.AutoLogout({ expiresIn, expirationDate: storageUser._tokenExpirationDate }),
+          new AuthActions.NavigateAfterLogin(),
         ] :
         [{ type: 'DUMMY' }];
     }),
@@ -118,7 +96,6 @@ export class AuthEffects {
   public authNavigateAfterLogin = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.NAVIGATE_AFTER_LOGIN),
     tap(() => {
-      console.log('Navigate after login/sign up:', this.router.url);
       // (this.router.url === '/signin' || this.router.url === '/signup') && this.router.navigate(['/']);
       this.router.navigate(['/']);
     })
@@ -129,12 +106,9 @@ export class AuthEffects {
     ofType(AuthActions.AuthTypes.TRY_LOGOUT),
     mergeMap(() => {
       return [
-        { type: AuthActions.AuthTypes.LOGOUT },
-        {
-          type: AuthActions.AuthTypes.SET_TOKEN_EXPIRATION_DATE,
-          payload: null
-        },
-        { type: AuthActions.AuthTypes.NAVIGATE_AFTER_LOGOUT }
+        new AuthActions.Logout(),
+        new AuthActions.SetTokenExpirationDate(null),
+        new AuthActions.NavigateAfterLogout(),
       ];
     }),
   );
@@ -143,7 +117,6 @@ export class AuthEffects {
   public authNavigateAfterLogout = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.NAVIGATE_AFTER_LOGOUT),
     tap(() => {
-      console.log('Navigate after logout');
       localStorage.removeItem('userData');
       this.router.navigate(['/signin']);
     })
@@ -155,26 +128,14 @@ export class AuthEffects {
     withLatestFrom(this.store$),
     map(([action, storeState]) => JSON.parse(localStorage.getItem('userData')) as StorageUser),
     mergeMap((userData: StorageUser) => {
-      // TODO remove ? statement
       const expiresIn = this.authService.getUserExpirationTime(userData);
       console.log('Token expires in ms:', expiresIn, userData);
       return expiresIn && expiresIn > 0 ?
         [
-          {
-            type: AuthActions.AuthTypes.SET_TOKEN,
-            payload: userData._token
-          },
-          {
-            type: AuthActions.AuthTypes.SIGNIN
-          },
-          {
-            type: AuthActions.AuthTypes.SET_TOKEN_EXPIRATION_DATE,
-            payload: userData._tokenExpirationDate
-          },
-          {
-            type: AuthActions.AuthTypes.AUTO_LOGOUT,
-            payload: { expiresIn, expirationDate: userData._tokenExpirationDate }
-          },
+          new AuthActions.SetToken(userData._token),
+          new AuthActions.Signin(),
+          new AuthActions.SetTokenExpirationDate(userData._tokenExpirationDate),
+          new AuthActions.AutoLogout({ expiresIn, expirationDate: userData._tokenExpirationDate }),
         ] :
         [{ type: 'DUMMY' }];
     })
@@ -189,7 +150,7 @@ export class AuthEffects {
     mergeMap(([expirationDate, store]) => {
       console.log('Auto logout:', expirationDate, store.auth.tokenExpirationDate);
       return store.auth.tokenExpirationDate === expirationDate ?
-        [{ type: AuthActions.AuthTypes.TRY_LOGOUT }] :
+        [new AuthActions.TryLogout()] :
         [{ type: 'DUMMY' }];
     }),
   );

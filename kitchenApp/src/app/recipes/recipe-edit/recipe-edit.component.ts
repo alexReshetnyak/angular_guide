@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { take } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
@@ -22,11 +23,12 @@ interface RecipeFormValue {
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.scss']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
   public recipeForm: FormGroup;
 
   private id: number;
   private editMode = false;
+  private storeSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -101,7 +103,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   private initEditForm(): void {
-    this.store.select('recipes')
+    this.storeSub = this.store.select('recipes')
       .pipe(take(1))
       .subscribe((recipeState: fromRecipe.State) => {
         const recipe = recipeState.recipes[this.id];
@@ -135,6 +137,10 @@ export class RecipeEditComponent implements OnInit {
       description: new FormControl(recipe.description, Validators.required),
       ingredients: recipe.ingredients
     });
+  }
+
+  ngOnDestroy() {
+    this.storeSub && this.storeSub.unsubscribe();
   }
 
 }

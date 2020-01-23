@@ -21,7 +21,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     return this.store.select('auth').pipe(
       take(1),
       map((authState: fromAuth.State) => {
-        !authState || !authState.authenticated && this.router.navigate(['/signin']);
+        if (!authState || !authState.authenticated) {
+          console.log('Auth guard navigate to Sign in');
+          this.router.navigate(['/signin']);
+        }
+
+        console.log('Auth Guard works!', authState && authState.authenticated);
         return authState && authState.authenticated;
       })
     );

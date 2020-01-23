@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from './models/recipe.model';
+import { ActivatedRoute, Data } from '@angular/router';
 
 @Component({
   selector: 'app-recipes',
@@ -8,9 +9,13 @@ import { Recipe } from './models/recipe.model';
   providers: []
 })
 export class RecipesComponent implements OnInit {
-  public selectedRecipe: Recipe;
+  public recipes: Recipe[];
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.route.data.subscribe((data: Data) => console.log('recipes component, route data:', data))
+  }
 }
