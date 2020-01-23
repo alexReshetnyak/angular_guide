@@ -10,7 +10,6 @@ export enum AuthTypes {
   TRY_SIGNIN                = '[auth] Try Signin',
   TRY_LOGOUT                = '[auth] Try Logout',
   LOGOUT                    = '[auth] Logout',
-  SIGNUP                    = '[auth] Signup',
   SIGNIN                    = '[auth] Signin',
   SET_TOKEN                 = '[auth] Set Token',
   SET_TOKEN_EXPIRATION_DATE = '[auth] Set Token Expiration Date',
@@ -34,10 +33,6 @@ export class TrySignin implements Action {
 
 export class TryLogout implements Action {
   readonly type = AuthTypes.TRY_LOGOUT;
-}
-
-export class Signup implements Action {
-  readonly type = AuthTypes.SIGNUP;
 }
 
 export class Signin implements Action {
@@ -83,7 +78,6 @@ export type AuthActions =
   TrySignup               |
   TrySignin               |
   TryLogout               |
-  Signup                  |
   Signin                  |
   Logout                  |
   SetToken                |

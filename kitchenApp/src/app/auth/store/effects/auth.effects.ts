@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { map, tap, switchMap, mergeMap, withLatestFrom, catchError, delay, } from 'rxjs/operators';
+import { map, tap, switchMap, mergeMap, withLatestFrom, catchError, delay, take, } from 'rxjs/operators';
 import { from, of, } from 'rxjs';
 
 import { StorageUser, AuthService } from '../../services/auth.service';
+import { CoreService } from 'src/app/core/services/core.service';
 
 import * as firebase from 'firebase/app';
 import * as AuthActions from '../actions/auth.actions';
@@ -14,6 +15,8 @@ import * as fromApp from '../../../store/app.reducers';
 
 // TODO Create async error interceptor somewhere in core service to catch an error and run spinner
 // TODO this.coreService.handleAsyncAction({ module: 'auth', action: from(firebase.auth().currentUser.getIdToken()) })
+
+const MODULE_NAME = 'auth';
 
 interface User {
   username: string;
@@ -63,10 +66,12 @@ export class AuthEffects {
   public authSignin = this.actions$.pipe(
     ofType(AuthActions.AuthTypes.TRY_SIGNIN),
     map((action: AuthActions.TrySignup) => action.payload),
-    switchMap((authData: User) => from(
+    switchMap((authData: User) => this.coreService.handleLoading(from(
       firebase.auth().signInWithEmailAndPassword(authData.username, authData.password)
-    )),
-    switchMap(() => from(firebase.auth().currentUser.getIdToken())),
+    ))),
+    switchMap(() => this.coreService.handleLoading(from(
+      firebase.auth().currentUser.getIdToken()
+    ))),
     map((token: string) => {
       const storageUser: string = createDataForStorage(token);
       localStorage.setItem('userData', storageUser);
@@ -84,10 +89,9 @@ export class AuthEffects {
         ] :
         [{ type: 'DUMMY' }];
     }),
-    // tap(action => { console.log('Tap after sign in, action:', action); }),
     catchError((err, caught) => {
       console.log('Firebase sign in error:', err);
-      // * this.store.dispatch(new CoreActions.SetNewError(err));
+      this.coreService.handleError(err, {moduleName: MODULE_NAME})
       return caught;
     })
   );
@@ -160,5 +164,6 @@ export class AuthEffects {
     private store$: Store<fromApp.AppState>,
     private router: Router,
     private authService: AuthService,
+    private coreService: CoreService,
   ) {}
 }
