@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public showMenu = false;
   public authState: Observable<fromAuth.State>;
 
-  public isLoading = false;
+
   public error: string = null;
 
   private closeSub: Subscription;

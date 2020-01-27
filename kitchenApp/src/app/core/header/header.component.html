@@ -1,7 +1,4 @@
 <ng-template appPlaceholder></ng-template>
-<div *ngIf="isLoading" style="text-align: center;">
-  <app-loading-spinner></app-loading-spinner>
-</div>
 
 <nav class="navbar navbar-expand-lg navbar-light">
   <a class="navbar-brand" href="#">Recipe Book</a>
@@ -42,7 +39,7 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{exact: true}"
         >
-          <a 
+          <a
             (click)="showMenu = false"
             class="nav-link"
             routerLink="/signup"
@@ -82,10 +79,10 @@
       </li>
     </ul>
 
-    <div 
-      appDropdown 
-      class="nav-item dropdown" 
-      cssClass="show" 
+    <div
+      appDropdown
+      class="nav-item dropdown"
+      cssClass="show"
       *ngIf="(authState | async)?.authenticated"
     >
       <a

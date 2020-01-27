@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { tap, switchMap, take } from 'rxjs/operators';
+import { tap, switchMap, take, catchError } from 'rxjs/operators';
 
 import * as fromApp from '../../store/app.reducers';
 import * as CoreActions from '../store/core.actions';
@@ -19,7 +19,7 @@ export class CoreService {
    *
    *
   **/
-  public handleLoading(stream$: Observable<any>): Observable<any> {
+  public handleLoading(stream$: Observable<any>, moduleName: string): Observable<any> {
     return of(null).pipe(
       tap(() => {
         console.log('Loading starts');
@@ -31,7 +31,16 @@ export class CoreService {
         console.log('Loading finish!');
         this.store.dispatch(new CoreActions.StopLoading());
         return of(result);
-      })
+      }),
+      // catchError((err) => {
+      //   console.log('Handle loading Error:', err);
+      //   // this.coreService.handleError(err, {moduleName: MODULE_NAME})
+      //   const message = this.modifyErrorText(err)
+      //   return of([
+      //     new CoreActions.SetError({ moduleName, message: message}),
+      //     new CoreActions.StopLoading(),
+      //   ]);
+      // }),
     );
   }
 

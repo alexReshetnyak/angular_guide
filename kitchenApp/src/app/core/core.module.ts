@@ -22,7 +22,8 @@ import { LoggingInterceptor } from '../shared/services/logging.interceptor';
   ],
   exports: [
     AppRoutingModule,
-    HeaderComponent
+    HeaderComponent,
+    HomeComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

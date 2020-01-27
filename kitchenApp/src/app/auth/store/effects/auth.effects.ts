@@ -68,10 +68,10 @@ export class AuthEffects {
     map((action: AuthActions.TrySignup) => action.payload),
     switchMap((authData: User) => this.coreService.handleLoading(from(
       firebase.auth().signInWithEmailAndPassword(authData.username, authData.password)
-    ))),
+    ), MODULE_NAME)),
     switchMap(() => this.coreService.handleLoading(from(
       firebase.auth().currentUser.getIdToken()
-    ))),
+    ), MODULE_NAME)),
     map((token: string) => {
       const storageUser: string = createDataForStorage(token);
       localStorage.setItem('userData', storageUser);
@@ -90,8 +90,8 @@ export class AuthEffects {
         [{ type: 'DUMMY' }];
     }),
     catchError((err, caught) => {
-      console.log('Firebase sign in error:', err);
-      this.coreService.handleError(err, {moduleName: MODULE_NAME})
+      console.log('Effects, Handle Auth Error:', err);
+      this.coreService.handleError(err, {moduleName: MODULE_NAME});
       return caught;
     })
   );
@@ -141,7 +141,7 @@ export class AuthEffects {
           new AuthActions.SetTokenExpirationDate(userData._tokenExpirationDate),
           new AuthActions.AutoLogout({ expiresIn, expirationDate: userData._tokenExpirationDate }),
         ] :
-        [{ type: 'DUMMY' }];
+        [new AuthActions.TryLogout()];
     })
   );
 
