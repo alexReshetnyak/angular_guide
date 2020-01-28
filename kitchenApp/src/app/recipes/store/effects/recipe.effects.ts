@@ -10,6 +10,7 @@ import { FIREBASE_URL } from 'src/app/secret';
 import * as RecipeActions from '../actions/recipe.actions';
 import * as fromRecipe    from '../reducers/recipe.reducers';
 
+// TODO Add handle loading
 
 @Injectable()
 export class RecipeEffects {

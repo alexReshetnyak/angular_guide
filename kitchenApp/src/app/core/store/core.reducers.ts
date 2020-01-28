@@ -15,10 +15,13 @@ const initialState: State = {
 export function coreReducer(state = initialState, action: CoreActions.CoreActions) {
   switch (action.type) {
     case (CoreActions.CoreTypes.SET_ERROR):
-      const errCopy = { ...state.err }
-      return {
+      const errCopy = { ...state.err };
+      return action.payload ? {
         ...state,
         err: {...errCopy, ...action.payload }
+      } : {
+        ...state,
+        err: null,
       };
     case (CoreActions.CoreTypes.START_LOADING):
       return {

@@ -25,8 +25,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           console.log('Auth guard navigate to Sign in');
           this.router.navigate(['/signin']);
         }
-
-        console.log('Auth Guard works!', authState && authState.authenticated);
         return authState && authState.authenticated;
       })
     );

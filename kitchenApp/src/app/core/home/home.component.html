@@ -1,1 +1,5 @@
-<app-loading-spinner></app-loading-spinner>
+<div class="spinner-container" *ngIf="showSpinner">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<ng-template appPlaceholder></ng-template>

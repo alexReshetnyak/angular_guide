@@ -32,15 +32,13 @@ export class CoreService {
         this.store.dispatch(new CoreActions.StopLoading());
         return of(result);
       }),
-      // catchError((err) => {
-      //   console.log('Handle loading Error:', err);
-      //   // this.coreService.handleError(err, {moduleName: MODULE_NAME})
-      //   const message = this.modifyErrorText(err)
-      //   return of([
-      //     new CoreActions.SetError({ moduleName, message: message}),
-      //     new CoreActions.StopLoading(),
-      //   ]);
-      // }),
+      catchError((err) => {
+        console.log('Handle loading Error:', err);
+        const message = this.modifyErrorText(err)
+        this.store.dispatch(new CoreActions.SetError({ moduleName, message: message}));
+        this.store.dispatch(new CoreActions.StopLoading());
+        return of(null);
+      }),
     );
   }
 
@@ -57,11 +55,14 @@ export class CoreService {
     if (!message) { return errorMessage; }
 
     switch (message) {
-      case 'EMAIL_EXISTS':
+      case 'auth/email-already-in-use':
         errorMessage = 'This email exists already';
         break;
-      case 'EMAIL_NOT_FOUND':
-        errorMessage = 'This email does not exist.';
+      case 'auth/weak-password':
+        errorMessage = 'Password should be at least 6 characters';
+        break;
+      case 'auth/user-not-found':
+        errorMessage = 'There is no user corresponding to this email/password';
         break;
       case 'auth/wrong-password':
         errorMessage = 'This password is not correct.';
