@@ -15,17 +15,18 @@ const routes: Routes = [
     component: RecipesComponent,
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
-    resolve: [RecipesResolverService],
     children: [
       { path: '', component: RecipeStartComponent },
       { path: 'new', component: RecipeEditComponent },
       {
         path: ':id',
         component: RecipeDetailComponent,
+        resolve: { recipe: RecipesResolverService },
       },
       {
         path: ':id/edit',
         component: RecipeEditComponent,
+        resolve: { recipe: RecipesResolverService },
       }
     ]
   }

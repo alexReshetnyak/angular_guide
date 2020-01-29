@@ -27,7 +27,7 @@ export class RecipeListComponent implements OnInit {
   ngOnInit() {
     this.store.select('recipes').pipe(
       map(recipeState => recipeState.recipes),
-      ).subscribe((recipes: Recipe[]) => {
+    ).subscribe((recipes: Recipe[]) => {
       this.recipes = recipes;
       if ((!recipes || !recipes.length) && this.firstLoad) {
         this.store.dispatch(new RecipeActions.FetchRecipes());

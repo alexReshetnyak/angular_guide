@@ -1,15 +1,27 @@
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 
 export class Recipe {
-  public name: string;
-  public description: string;
-  public imagePath: string;
-  public ingredients: Ingredient[];
+  public attr: any;
 
-  constructor(name: string, desc: string, imagePath: string, ingredients: Ingredient[]) {
-    this.name = name;
-    this.description = desc;
-    this.imagePath = imagePath;
-    this.ingredients = ingredients;
+  constructor(attributes: any) {
+    this.attr = attributes;
+  }
+
+  public get name(): string {
+    return this.attr.name;
+  }
+
+  public get description(): string {
+    return this.attr.desc;
+  }
+
+  public get imagePath(): string {
+    return this.attr.imagePath;
+  }
+
+  public get ingredients(): Ingredient[] {
+    // TODO Add changes to ingredient model
+    // TODO return attr.ingredients.map(i => new Ingredient(i))
+    return this.attr.ingredients;
   }
 }

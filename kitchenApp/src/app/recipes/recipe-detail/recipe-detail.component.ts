@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, Data } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -30,6 +30,7 @@ export class RecipeDetailComponent implements OnInit {
       this.id = +params['id'];
       this.recipeState = this.store.select('recipes');
     });
+    this.route.data.subscribe((data: Data) => console.log('recipes component, route data:', data));
   }
 
   public onAddToShoppingList():void {

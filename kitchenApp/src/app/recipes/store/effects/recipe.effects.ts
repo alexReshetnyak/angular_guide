@@ -5,6 +5,7 @@ import { HttpClient, HttpRequest } from '@angular/common/http';
 import { switchMap, withLatestFrom, map } from 'rxjs/operators';
 
 import { Recipe } from '../../models/recipe.model';
+import { CoreService } from 'src/app/core/services/core.service';
 import { FIREBASE_URL } from 'src/app/secret';
 
 import * as RecipeActions from '../actions/recipe.actions';
@@ -12,19 +13,25 @@ import * as fromRecipe    from '../reducers/recipe.reducers';
 
 // TODO Add handle loading
 
+const MODULE_NAME = 'recipes';
+
 @Injectable()
 export class RecipeEffects {
   @Effect()
   public fetchRecipes = this.actions$.pipe(
     ofType(RecipeActions.RecipeTypes.FETCH_RECIPES),
-    switchMap((action: RecipeActions.FetchRecipes) => (
-      this.httpClient.get<Recipe[]>(`${FIREBASE_URL}/recipes.json`, {
+    switchMap((action: RecipeActions.FetchRecipes) => {
+      const req = this.httpClient.get<Recipe[]>(`${FIREBASE_URL}/recipes.json`, {
         observe: 'body',
         responseType: 'json'
-      })
-    )),
+      });
+      return this.coreService.handleLoading(req, MODULE_NAME);
+    }),
+    map((recipes: Recipe[]) => recipes.map(recipe => new Recipe(recipe))),
     map((recipes: Recipe[]) => {
+      recipes = recipes || [];
       for (const recipe of recipes) {
+        // TODO add setter ingredients
         if (!recipe.ingredients) { recipe.ingredients = []; }
       }
       return new RecipeActions.SetRecipes(recipes);
@@ -42,12 +49,16 @@ export class RecipeEffects {
         state.recipes,
         { reportProgress: true }
       );
-      return this.httpClient.request(req);
+      return this.coreService.handleLoading(
+        this.httpClient.request(req),
+        MODULE_NAME,
+      );
     }));
 
   constructor(
     private actions$: Actions,
     private httpClient: HttpClient,
     private store: Store<fromRecipe.FeatureState>,
+    private coreService: CoreService,
   ) {}
 }
