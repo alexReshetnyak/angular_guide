@@ -11,6 +11,8 @@ import * as RecipeActions from '../store/actions/recipe.actions';
 import * as fromRecipe    from '../store/reducers/recipe.reducers';
 import * as fromApp from '../../store/app.reducers';
 
+// TODO fix saving for new items
+
 interface RecipeFormValue {
   name: string;
   imagePath: string;
@@ -46,7 +48,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   public get ingredients(): FormArray {
     // return <FormArray>this.signupForm.get('hobbies');
-    return this.recipeForm.get('ingredients') as FormArray;
+    return this.recipeForm && this.recipeForm.get('ingredients') as FormArray;
   }
 
   public onSubmit(): void {
@@ -88,7 +90,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   private get ingredientsFormArray(): FormArray {
-    return this.recipeForm.get('ingredients') as FormArray;
+    return this.recipeForm && this.recipeForm.get('ingredients') as FormArray;
   }
 
   private initForm(): void {

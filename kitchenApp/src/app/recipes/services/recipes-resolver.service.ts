@@ -13,7 +13,7 @@ import * as RecipeActions from '../store/actions/recipe.actions';
 @Injectable({
   providedIn: 'root'
 })
-export class RecipesResolverService implements Resolve<Recipe[]> {
+export class RecipesResolverService implements Resolve<Recipe> {
   constructor(
     private store: Store<fromApp.AppState>,
     private actions$: Actions
@@ -22,52 +22,28 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
   public resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<Recipe[]> {
-    // TODO rewrite this resolver for recipe id/edit components
-    return route.params.subscribe.pipe(
-      map((params: Params) => {
-        return +params['id'];
+  ): Observable<Recipe> {
+    const recipeIndex = route.params.id;
+
+    return this.store.select('recipes').pipe(
+      take(1),
+      map(recipesState => recipesState.recipes),
+      switchMap((recipes: Recipe[]) => {
+        if (!recipes.length) {
+          this.store.dispatch(new RecipeActions.FetchRecipes());
+          return this.actions$.pipe(
+            ofType(RecipeActions.RecipeTypes.SET_RECIPES),
+            take(1),
+            map((action: RecipeActions.SetRecipes) => action.payload),
+          )
+        } else {
+          return of(recipes);
+        }
       }),
-      withLatestFrom(
-        this.store.select('recipes').pipe(
-          take(1),
-          map(recipesState => recipesState.recipes),
-          // TODO make switchMap work
-          // switchMap((recipes: Recipe[]) => {
-          //   if (!recipes.length) {
-          //     this.store.dispatch(new RecipeActions.FetchRecipes());
-          //     return this.actions$.pipe(
-          //       ofType(RecipeActions.RecipeTypes.SET_RECIPES),
-          //       take(1),
-          //       map((action: RecipeActions.SetRecipes) => action.payload),
-          //     )
-          //   } else {
-          //     return of(recipes);
-          //   }
-          // }),
-        )
-      ),
-      map(([recipeId, recipes]: (number | Recipe[])[]) => {
-        // TODO add id to recipe model
-        return (recipes as Recipe[]).find(recipe => recipe.id)
+      map((recipes: Recipe[]) => {
+        const recipe = recipes[recipeIndex];
+        return recipe;
       }),
     );
-
-    // return this.store.select('recipes').pipe(
-    //   take(1),
-    //   map(recipesState => recipesState.recipes as Recipe[]),
-    //   switchMap((recipes: Recipe[]) => {
-    //     if (!recipes.length) {
-    //       this.store.dispatch(new RecipeActions.FetchRecipes());
-    //       return this.actions$.pipe(
-    //         ofType(RecipeActions.RecipeTypes.SET_RECIPES),
-    //         take(1),
-    //         map((action: RecipeActions.SetRecipes) => action.payload),
-    //       )
-    //     } else {
-    //       return of(recipes);
-    //     }
-    //   }),
-    // );
   }
 }

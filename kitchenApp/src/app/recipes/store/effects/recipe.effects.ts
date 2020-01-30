@@ -11,8 +11,6 @@ import { FIREBASE_URL } from 'src/app/secret';
 import * as RecipeActions from '../actions/recipe.actions';
 import * as fromRecipe    from '../reducers/recipe.reducers';
 
-// TODO Add handle loading
-
 const MODULE_NAME = 'recipes';
 
 @Injectable()
@@ -27,13 +25,11 @@ export class RecipeEffects {
       });
       return this.coreService.handleLoading(req, MODULE_NAME);
     }),
-    map((recipes: Recipe[]) => recipes.map(recipe => new Recipe(recipe))),
+    map((recipes: Recipe[]) => (recipes || []).map(recipe => new Recipe(recipe))),
     map((recipes: Recipe[]) => {
-      recipes = recipes || [];
-      for (const recipe of recipes) {
-        // TODO add setter ingredients
-        if (!recipe.ingredients) { recipe.ingredients = []; }
-      }
+      recipes.forEach(recipe => {
+        !recipe.ingredients && (recipe.ingredients = []);
+      });
       return new RecipeActions.SetRecipes(recipes);
     })
   );

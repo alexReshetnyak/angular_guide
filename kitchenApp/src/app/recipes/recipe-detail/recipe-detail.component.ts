@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router, Data } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
+
+import { Recipe } from '../models/recipe.model';
 
 import * as ShoppingListActions from '../../shopping-list/store/actions/shopping-list.actions';
 import * as fromApp from '../../store/app.reducers';
@@ -16,7 +18,7 @@ import * as RecipeActions from '../store/actions/recipe.actions';
 })
 export class RecipeDetailComponent implements OnInit {
   public id: number;
-  public recipeState: Observable<fromRecipe.State>;
+  public recipeState: Observable<Recipe>;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,11 +28,11 @@ export class RecipeDetailComponent implements OnInit {
 
   ngOnInit() {
     // const id = this.route.snapshot.params['id'];
-    this.route.params.subscribe((params: Params) => {
-      this.id = +params['id'];
-      this.recipeState = this.store.select('recipes');
-    });
-    this.route.data.subscribe((data: Data) => console.log('recipes component, route data:', data));
+    // this.route.params.subscribe((params: Params) => {
+    //   this.id = +params['id'];
+    //   this.recipeState = this.store.select('recipes');
+    // });
+    this.recipeState = this.route.data.pipe(map((data: Data) => data.recipe ));
   }
 
   public onAddToShoppingList():void {

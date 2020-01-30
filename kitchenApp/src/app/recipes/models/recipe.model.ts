@@ -1,11 +1,11 @@
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 
 export class Recipe {
-  public attr: any;
+  private _ingredients: Ingredient[] = null;
 
-  constructor(attributes: any) {
-    this.attr = attributes;
-  }
+  constructor(
+    public attr: { [key: string]: any }
+  ) {}
 
   public get name(): string {
     return this.attr.name;
@@ -20,8 +20,13 @@ export class Recipe {
   }
 
   public get ingredients(): Ingredient[] {
-    // TODO Add changes to ingredient model
-    // TODO return attr.ingredients.map(i => new Ingredient(i))
-    return this.attr.ingredients;
+    if (!this._ingredients) {
+      this._ingredients = this.attr.ingredients.map(ingredient => new Ingredient(ingredient));
+    }
+    return this._ingredients;
+  }
+
+  public set ingredients(ingredients: Ingredient[]) {
+    this._ingredients = ingredients;
   }
 }
