@@ -13,8 +13,6 @@ import * as AuthActions from '../actions/auth.actions';
 import * as fromApp from '../../../store/app.reducers';
 
 
-// TODO Apply handle loading to all async actions
-
 const MODULE_NAME = 'auth';
 
 interface User {
@@ -47,7 +45,7 @@ export class AuthEffects {
           switchMap(() => from(firebase.auth().currentUser.getIdToken()))
         ),
         MODULE_NAME
-      )
+      );
     }),
     map((token: string) => {
       const storageUser: string = createDataForStorage(token);
@@ -81,7 +79,7 @@ export class AuthEffects {
           switchMap(() => from(firebase.auth().currentUser.getIdToken()))
         ),
         MODULE_NAME
-      )
+      );
     }),
     map((token: string) => {
       if (!token) { return null; }

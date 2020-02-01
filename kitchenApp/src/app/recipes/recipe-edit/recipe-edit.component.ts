@@ -10,6 +10,7 @@ import { Ingredient } from 'src/app/shared/models/ingredient.model';
 import * as RecipeActions from '../store/actions/recipe.actions';
 import * as fromRecipe    from '../store/reducers/recipe.reducers';
 import * as fromApp from '../../store/app.reducers';
+import { Recipe } from '../models/recipe.model';
 
 // TODO fix saving for new items
 
@@ -64,7 +65,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         updatedRecipe: this.recipeForm.value
       }));
     } else {
-      this.store.dispatch(new RecipeActions.AddRecipe(this.recipeForm.value));
+      this.store.dispatch(new RecipeActions.AddRecipe(new Recipe(this.recipeForm.value)));
     }
     this.onCancel();
   }

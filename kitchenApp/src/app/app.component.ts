@@ -37,6 +37,7 @@ export class AppComponent  implements OnInit {
     firebase.initializeApp({
       apiKey: FIREBASE_API_KEY,
       authDomain: FIREBASE_URL,
+      databaseURL: 'https://ng-kitchen-app.firebaseio.com/',
     });
     this.store.dispatch(new AuthActions.AutoLogin());
   }

@@ -1,6 +1,7 @@
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 
 export class Recipe {
+  // tslint:disable-next-line: variable-name
   private _ingredients: Ingredient[] = null;
 
   constructor(
@@ -20,7 +21,7 @@ export class Recipe {
   }
 
   public get ingredients(): Ingredient[] {
-    if (!this._ingredients) {
+    if (!this._ingredients && this.attr.ingredients) {
       this._ingredients = this.attr.ingredients.map(ingredient => new Ingredient(ingredient));
     }
     return this._ingredients;

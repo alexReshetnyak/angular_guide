@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router, Data } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { take, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { take, map, switchMap, tap } from 'rxjs/operators';
 
 import { Recipe } from '../models/recipe.model';
 
@@ -28,14 +28,16 @@ export class RecipeDetailComponent implements OnInit {
 
   ngOnInit() {
     // const id = this.route.snapshot.params['id'];
-    // this.route.params.subscribe((params: Params) => {
-    //   this.id = +params['id'];
-    //   this.recipeState = this.store.select('recipes');
-    // });
-    this.recipeState = this.route.data.pipe(map((data: Data) => data.recipe ));
+    this.route.params.pipe(
+      tap((params: Params) => { this.id = +params.id; }),
+      switchMap(() => this.route.data),
+      map((data: Data) => data.recipe ),
+    ).subscribe((recipe: Recipe) => {
+      this.recipeState = of(recipe);
+    });
   }
 
-  public onAddToShoppingList():void {
+  public onAddToShoppingList() {
     this.store.select('recipes')
       .pipe(take(1))
       .subscribe((recipeState: fromRecipe.State) => {

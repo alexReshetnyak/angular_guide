@@ -1,8 +1,11 @@
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { switchMap, withLatestFrom, map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import * as firebase from 'firebase/app';
+import 'firebase/database';
 
 import { Recipe } from '../../models/recipe.model';
 import { CoreService } from 'src/app/core/services/core.service';
@@ -25,7 +28,9 @@ export class RecipeEffects {
       });
       return this.coreService.handleLoading(req, MODULE_NAME);
     }),
-    map((recipes: Recipe[]) => (recipes || []).map(recipe => new Recipe(recipe))),
+    map((recipes: Recipe[]) => (recipes || []).map(recipe => {
+      return new Recipe(recipe);
+    })),
     map((recipes: Recipe[]) => {
       recipes.forEach(recipe => {
         !recipe.ingredients && (recipe.ingredients = []);
@@ -38,15 +43,12 @@ export class RecipeEffects {
   public storeRecipes = this.actions$.pipe(
     ofType(RecipeActions.RecipeTypes.STORE_RECIPES),
     withLatestFrom(this.store.select('recipes')),
-    switchMap(([action, state]) => {
-      const req = new HttpRequest(
-        'PUT',
-        `${FIREBASE_URL}/recipes.json`,
-        state.recipes,
-        { reportProgress: true }
-      );
+    map(([action, state]) => state.recipes.map(recipe => recipe.attr)),
+    switchMap(recipes => {
+      const db = firebase.database();
+      const req = db.ref('recipes').set(recipes);
       return this.coreService.handleLoading(
-        this.httpClient.request(req),
+        of(req),
         MODULE_NAME,
       );
     }));

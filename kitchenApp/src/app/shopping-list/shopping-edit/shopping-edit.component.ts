@@ -35,6 +35,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.store.select('shoppingList')
       .subscribe((stateData: ShoppingListReducers.State) => {
+        // tslint:disable-next-line: no-bitwise
         if (~stateData.editedIngredientIndex) {
           this.editMode = true;
           this.editedItem = stateData.editedIngredient;
@@ -49,8 +50,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(form: NgForm): void {
-    const value = form.value;
-    const newIngredient = new Ingredient(value.name, value.amount);
+    const newIngredient = new Ingredient(form.value);
 
     if (this.editMode) {
       this.store.dispatch(new ShoppingListActions.UpdateIngredient(newIngredient));
