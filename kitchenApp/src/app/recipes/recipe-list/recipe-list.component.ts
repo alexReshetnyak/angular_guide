@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 
-import { Recipe } from '../models/recipe.model';
+import { Recipe, StateRecipe } from '../models/recipe.model';
 
 import * as fromApp from '../../store/app.reducers';
 import * as RecipeActions from '../store/actions/recipe.actions';
@@ -25,10 +25,11 @@ export class RecipeListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.select('recipes').pipe(
+    this.store.select('recipe').pipe(
       map(recipeState => recipeState.recipes),
-    ).subscribe((recipes: Recipe[]) => {
-      this.recipes = recipes;
+    ).subscribe((recipes: StateRecipe[]) => {
+      this.recipes = recipes.map(recipe => new Recipe(recipe));
+
       if ((!recipes || !recipes.length) && this.firstLoad) {
         this.store.dispatch(new RecipeActions.FetchRecipes());
       }

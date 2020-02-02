@@ -8,13 +8,13 @@ import * as fromCore from '../core/store/core.reducers';
 export interface AppState {
   shoppingList: fromShoppingList.State;
   auth: fromAuth.State;
-  recipes: fromRecipe.State;
+  recipe: fromRecipe.State;
   core: fromCore.State;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
   shoppingList: fromShoppingList.shoppingListReducer,
   auth:         fromAuth.authReducer,
-  recipes:      fromRecipe.recipeReducer,
+  recipe:      fromRecipe.recipeReducer,
   core:         fromCore.coreReducer,
 };

@@ -33,12 +33,12 @@ export class RecipeDetailComponent implements OnInit {
       switchMap(() => this.route.data),
       map((data: Data) => data.recipe ),
     ).subscribe((recipe: Recipe) => {
-      this.recipeState = of(recipe);
+      this.recipeState = of(new Recipe(recipe));
     });
   }
 
   public onAddToShoppingList() {
-    this.store.select('recipes')
+    this.store.select('recipe')
       .pipe(take(1))
       .subscribe((recipeState: fromRecipe.State) => {
         this.store.dispatch(new ShoppingListActions.AddIngredients(

@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 
-import { Recipe } from '../../models/recipe.model';
+import { StateRecipe } from '../../models/recipe.model';
 import { CoreService } from 'src/app/core/services/core.service';
 import { FIREBASE_URL } from 'src/app/secret';
 
@@ -22,16 +22,14 @@ export class RecipeEffects {
   public fetchRecipes = this.actions$.pipe(
     ofType(RecipeActions.RecipeTypes.FETCH_RECIPES),
     switchMap((action: RecipeActions.FetchRecipes) => {
-      const req = this.httpClient.get<Recipe[]>(`${FIREBASE_URL}/recipes.json`, {
+      const req = this.httpClient.get<StateRecipe[]>(`${FIREBASE_URL}/recipes.json`, {
         observe: 'body',
         responseType: 'json'
       });
       return this.coreService.handleLoading(req, MODULE_NAME);
     }),
-    map((recipes: Recipe[]) => (recipes || []).map(recipe => {
-      return new Recipe(recipe);
-    })),
-    map((recipes: Recipe[]) => {
+    map((recipes: StateRecipe[]) => (recipes || [])),
+    map((recipes: StateRecipe[]) => {
       recipes.forEach(recipe => {
         !recipe.ingredients && (recipe.ingredients = []);
       });
@@ -42,8 +40,8 @@ export class RecipeEffects {
   @Effect({ dispatch: false })
   public storeRecipes = this.actions$.pipe(
     ofType(RecipeActions.RecipeTypes.STORE_RECIPES),
-    withLatestFrom(this.store.select('recipes')),
-    map(([action, state]) => state.recipes.map(recipe => recipe.attr)),
+    withLatestFrom(this.store.select('recipe')),
+    map(([action, state]) => state.recipes),
     switchMap(recipes => {
       const db = firebase.database();
       const req = db.ref('recipes').set(recipes);

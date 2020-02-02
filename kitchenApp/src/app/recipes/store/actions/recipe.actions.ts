@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Recipe } from '../../models/recipe.model';
+import { StateRecipe } from '../../models/recipe.model';
 
 
 export enum RecipeTypes {
@@ -14,19 +14,19 @@ export enum RecipeTypes {
 export class SetRecipes implements Action {
   readonly type = RecipeTypes.SET_RECIPES;
 
-  constructor(public payload: Recipe[]) {}
+  constructor(public payload: StateRecipe[]) {}
 }
 
 export class AddRecipe implements Action {
   readonly type = RecipeTypes.ADD_RECIPE;
 
-  constructor(public payload: Recipe) {}
+  constructor(public payload: StateRecipe) {}
 }
 
 export class UpdateRecipe implements Action {
   readonly type = RecipeTypes.UPDATE_RECIPE;
 
-  constructor(public payload: {index: number, updatedRecipe: Recipe}) {}
+  constructor(public payload: {index: number, updatedRecipe: StateRecipe}) {}
 }
 
 export class DeleteRecipe implements Action {

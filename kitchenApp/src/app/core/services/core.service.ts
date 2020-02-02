@@ -12,6 +12,7 @@ export class CoreService {
     private store: Store<fromApp.AppState>,
   ) {}
 
+  // TODO write a comment in jsdoc format
   /**
    *
    *
@@ -34,8 +35,8 @@ export class CoreService {
       }),
       catchError((err) => {
         console.log('Handle loading Error:', err);
-        const message = this.modifyErrorText(err)
-        this.store.dispatch(new CoreActions.SetError({ moduleName, message: message}));
+        const message = this.modifyErrorText(err);
+        this.store.dispatch(new CoreActions.SetError({ moduleName, message }));
         this.store.dispatch(new CoreActions.StopLoading());
         return of(null);
       }),
@@ -44,8 +45,8 @@ export class CoreService {
 
   public handleError(err: Error, {moduleName = 'core', cancelLoading = true} = {}): void {
     console.log('Core service, error:', err, moduleName, cancelLoading);
-    const message = this.modifyErrorText(err)
-    this.store.dispatch(new CoreActions.SetError({ moduleName, message: message}));
+    const message = this.modifyErrorText(err);
+    this.store.dispatch(new CoreActions.SetError({ moduleName, message }));
     cancelLoading && this.store.dispatch(new CoreActions.StopLoading());
   }
 

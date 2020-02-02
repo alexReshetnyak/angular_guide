@@ -1,11 +1,19 @@
 
-import { Ingredient } from 'src/app/shared/models/ingredient.model';
+import { StateIngredient } from 'src/app/shared/models/ingredient.model';
 
 import { ShoppingListTypes, ShoppingListActions } from '../actions/shopping-list.actions';
 
+import * as fromApp from '../../../store/app.reducers';
+
+export interface FeatureState extends fromApp.AppState {
+  ingredients: StateIngredient[];
+  editedIngredient: StateIngredient;
+  editedIngredientIndex: number;
+}
+
 export interface State {
-  ingredients: Ingredient[];
-  editedIngredient: Ingredient;
+  ingredients: StateIngredient[];
+  editedIngredient: StateIngredient;
   editedIngredientIndex: number;
 }
 
@@ -33,7 +41,7 @@ export function shoppingListReducer(
       };
 
     case ShoppingListTypes.UPDATE_INGREDIENT:
-      const updatedIngredient = action.payload as Ingredient;
+      const updatedIngredient = action.payload;
       const updatedIngredients = [...state.ingredients];
       updatedIngredients[state.editedIngredientIndex] = updatedIngredient;
       return {

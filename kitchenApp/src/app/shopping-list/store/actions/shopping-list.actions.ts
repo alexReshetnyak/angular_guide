@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Ingredient } from 'src/app/shared/models/ingredient.model';
+import { StateIngredient } from 'src/app/shared/models/ingredient.model';
 
 export enum ShoppingListTypes {
   ADD_INGREDIENT     = '[Shopping List] Add Ingredient',
@@ -14,19 +14,19 @@ export enum ShoppingListTypes {
 export class AddIngredient implements Action {
   readonly type = ShoppingListTypes.ADD_INGREDIENT;
 
-  constructor(public payload: Ingredient) {}
+  constructor(public payload: StateIngredient) {}
 }
 
 export class AddIngredients implements Action {
   readonly type = ShoppingListTypes.ADD_INGREDIENTS;
 
-  constructor(public payload: Ingredient[]) {}
+  constructor(public payload: StateIngredient[]) {}
 }
 
 export class UpdateIngredient implements Action {
   readonly type = ShoppingListTypes.UPDATE_INGREDIENT;
 
-  constructor(public payload: Ingredient) {}
+  constructor(public payload: StateIngredient) {}
 }
 
 export class DeleteIngredient implements Action {

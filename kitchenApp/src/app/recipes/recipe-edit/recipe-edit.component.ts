@@ -5,14 +5,12 @@ import { take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { Ingredient } from 'src/app/shared/models/ingredient.model';
+import { StateIngredient } from 'src/app/shared/models/ingredient.model';
 
 import * as RecipeActions from '../store/actions/recipe.actions';
 import * as fromRecipe    from '../store/reducers/recipe.reducers';
 import * as fromApp from '../../store/app.reducers';
-import { Recipe } from '../models/recipe.model';
 
-// TODO fix saving for new items
 
 interface RecipeFormValue {
   name: string;
@@ -53,19 +51,13 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    // const newRecipe = new Recipe(
-    //   this.recipeForm.value['name'],
-    //   this.recipeForm.value['description'],
-    //   this.recipeForm.value['imagePath'],
-    //   this.recipeForm.value['ingredients']
-    // );
     if (this.editMode) {
       this.store.dispatch(new RecipeActions.UpdateRecipe({
         index: this.id,
         updatedRecipe: this.recipeForm.value
       }));
     } else {
-      this.store.dispatch(new RecipeActions.AddRecipe(new Recipe(this.recipeForm.value)));
+      this.store.dispatch(new RecipeActions.AddRecipe(this.recipeForm.value));
     }
     this.onCancel();
   }
@@ -106,13 +98,13 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   private initEditForm(): void {
-    this.storeSub = this.store.select('recipes')
+    this.storeSub = this.store.select('recipe')
       .pipe(take(1))
       .subscribe((recipeState: fromRecipe.State) => {
         const recipe = recipeState.recipes[this.id];
         const ingredients = new FormArray([]);
 
-        recipe.ingredients && recipe.ingredients.forEach((ingredient: Ingredient) => {
+        recipe.ingredients && recipe.ingredients.forEach((ingredient: StateIngredient) => {
           ingredients.push(
             new FormGroup({
               name: new FormControl(ingredient.name, Validators.required),
