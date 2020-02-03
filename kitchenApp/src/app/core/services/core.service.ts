@@ -12,14 +12,9 @@ export class CoreService {
     private store: Store<fromApp.AppState>,
   ) {}
 
-  // TODO write a comment in jsdoc format
   /**
-   *
-   *
-   *
-   *
-   *
-  **/
+   * Method to handle loading HTTP request
+  */
   public handleLoading(stream$: Observable<any>, moduleName: string): Observable<any> {
     return of(null).pipe(
       tap(() => {
