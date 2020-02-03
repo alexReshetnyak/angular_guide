@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { platformBrowser } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
@@ -31,14 +32,18 @@ import * as AuthActions from './auth/store/actions/auth.actions';
 export class AppComponent  implements OnInit {
   constructor(
     private store: Store<fromApp.AppState>,
+    @Inject(PLATFORM_ID) private platformId, // * Store global ID of current platform in this property (SSR)
   ) {}
 
   ngOnInit() {
+    if (platformBrowser(this.platformId)) { // * Run only if it is a browser platform (not server)
+      this.store.dispatch(new AuthActions.AutoLogin());
+    }
+
     firebase.initializeApp({
       apiKey: FIREBASE_API_KEY,
       authDomain: FIREBASE_URL,
       databaseURL: 'https://ng-kitchen-app.firebaseio.com/',
     });
-    this.store.dispatch(new AuthActions.AutoLogin());
   }
 }
