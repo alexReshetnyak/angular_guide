@@ -13,8 +13,9 @@ const routes: Routes = [
   {
     path: '',
     component: RecipesComponent,
-    canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard],
+    // TODO SSR
+    // canActivate: [AuthGuard],
+    // canActivateChild: [AuthGuard],
     children: [
       { path: '', component: RecipeStartComponent },
       { path: 'new', component: RecipeEditComponent },

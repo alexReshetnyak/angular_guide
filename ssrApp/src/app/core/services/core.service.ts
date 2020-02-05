@@ -47,7 +47,7 @@ export class CoreService {
 
   private modifyErrorText(err): string {
     let errorMessage = 'An unknown error occurred!';
-    const message = err.code;
+    const message = err.code || err.statusText;
     if (!message) { return errorMessage; }
 
     switch (message) {
@@ -62,6 +62,9 @@ export class CoreService {
         break;
       case 'auth/wrong-password':
         errorMessage = 'This password is not correct.';
+        break;
+      case 'Unauthorized':
+        errorMessage = "You don't have access to do that. Please login";
         break;
     }
     return errorMessage;

@@ -26,7 +26,8 @@ import { LoggingInterceptor } from '../shared/services/logging.interceptor';
     HomeComponent,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    // TODO SSR
+    // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true }
   ]
 })

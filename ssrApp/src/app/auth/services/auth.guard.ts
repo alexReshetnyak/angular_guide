@@ -18,6 +18,9 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     routerState: RouterStateSnapshot,
   ): Observable<boolean> {
+    // TODO For SSR check first if it's server
+    // TODO if it is server return true
+    // TODO if it is browser and authenticated === false  run auto login
     return this.store.select('auth').pipe(
       take(1),
       map((authState: fromAuth.State) => {
