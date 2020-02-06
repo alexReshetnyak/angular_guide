@@ -32,10 +32,12 @@ import * as AuthActions from './auth/store/actions/auth.actions';
 export class AppComponent  implements OnInit {
   constructor(
     private store: Store<fromApp.AppState>,
+    // * SSR logic
     @Inject(PLATFORM_ID) private platformId, // * Store global ID of current platform in this property (SSR)
   ) {}
 
   ngOnInit() {
+    // * SSR logic
     if (isPlatformBrowser(this.platformId)) { // * Run only if it is a browser platform (not server)
       this.store.dispatch(new AuthActions.AutoLogin());
       firebase.initializeApp({
