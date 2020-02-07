@@ -26,11 +26,13 @@ export const AppAnimations = [
   trigger('wildState', [
     state('normal', style({
       'background-color': 'red',
-      transform: 'translateX(0) scale(1)'
+      transform: 'translateX(0) scale(1)',
+      borderRadius: '0px',
     })),
     state('highlighted', style({
       'background-color': 'blue',
-      transform: 'translateX(100px) scale(1)'
+      transform: 'translateX(100px) scale(1)',
+      borderRadius: '0px',
     })),
     state('shrunken', style({
       'background-color': 'green',
@@ -39,13 +41,17 @@ export const AppAnimations = [
     transition('normal => highlighted', animate(300)),
     transition('highlighted => normal', animate(800)),
     transition('shrunken <=> *', [
-      style({
+      style({ // * apply styles without transition
         'background-color': 'orange'
       }),
-      animate(1000, style({
-        borderRadius: '50px'
+      animate(5000, style({ // * styles before this animate
+        'background-color': 'blue'
       })),
-      animate(500)
+      animate(5000, style({ // * styles before this animate
+        borderRadius: '50px',
+        'background-color': 'red'
+      })),
+      animate(5000)
     ])
   ]),
 
@@ -98,7 +104,6 @@ export const AppAnimations = [
         })
       ]))
     ]),
-
     transition('* => void', [
       group([
         animate(300, style({
