@@ -14,7 +14,7 @@ export class CoreService {
 
   /**
    * Method to handle loading HTTP request
-  */
+   */
   public handleLoading(stream$: Observable<any>, moduleName: string): Observable<any> {
     return of(null).pipe(
       tap(() => {

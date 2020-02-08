@@ -13,8 +13,8 @@ export class AppComponent {
   list = ['Milk', 'Sugar', 'Bread'];
 
   onAnimate() {
-    this.state == 'normal' ? this.state = 'highlighted' : this.state = 'normal';
-    this.wildState == 'normal' ? this.wildState = 'highlighted' : this.wildState = 'normal';
+    this.state === 'normal' ? this.state = 'highlighted' : this.state = 'normal';
+    this.wildState === 'normal' ? this.wildState = 'highlighted' : this.wildState = 'normal';
   }
 
   onShrink() {

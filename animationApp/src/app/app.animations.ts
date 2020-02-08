@@ -36,7 +36,8 @@ export const AppAnimations = [
     })),
     state('shrunken', style({
       'background-color': 'green',
-      transform: 'translateX(0) scale(0.5)'
+      transform: 'translateX(0) scale(0.5)',
+      borderRadius: '0px',
     })),
     transition('normal => highlighted', animate(300)),
     transition('highlighted => normal', animate(800)),
@@ -44,23 +45,23 @@ export const AppAnimations = [
       style({ // * apply styles without transition
         'background-color': 'orange'
       }),
-      animate(5000, style({ // * styles before this animate
+      animate(5000, style({ // * intermediate styles with transition
         'background-color': 'blue'
       })),
-      animate(5000, style({ // * styles before this animate
+      animate(5000, style({ // * next intermediate styles
         borderRadius: '50px',
         'background-color': 'red'
       })),
-      animate(5000)
+      animate(5000) // * shrunken styles will be applied here
     ])
   ]),
 
   trigger('list1', [
-    state('in', style({
+    state('in', style({ // * in - dummy name
       opacity: 1,
       transform: 'translateX(0)'
     })),
-    transition('void => *', [
+    transition('void => *', [ // * void - element not exist
       style({
         opacity: 0,
         transform: 'translateX(-100px)'
@@ -90,22 +91,22 @@ export const AppAnimations = [
         style({
           transform: 'translateX(-50px)',
           opacity: 0.5,
-          offset: 0.3
+          offset: 0.3 // * this part of animation will take 30% of time
         }),
         style({
           transform: 'translateX(-20px)',
           opacity: 1,
-          offset: 0.8
+          offset: 0.8 // * will apply this styles after 800ms (80%)
         }),
         style({
           transform: 'translateX(0px)',
           opacity: 1,
-          offset: 1
+          offset: 1 // * will apply this styles after 1000ms (100%)
         })
       ]))
     ]),
     transition('* => void', [
-      group([
+      group([ // * perform 2 animation on one time with different transition
         animate(300, style({
           color: 'red'
         })),
